@@ -4,23 +4,22 @@
 import PackageDescription
 
 let package = Package(
-    name: "CameraScan",
-    platforms: [
-      .iOS(.v14)
-    ],
-    products: [
-        .library(
-            name: "CameraScan",
-            targets: ["CameraScan"]),
-    ],
-    dependencies: [
-    ],
-    targets: [
-        .target(
-            name: "CameraScan",
-            dependencies: []),
-        .testTarget(
-            name: "CameraScanTests",
-            dependencies: ["CameraScan"]),
-    ]
-)
+  name: "CameraScan",
+  platforms: [
+    .iOS(.v14),
+  ],
+  products: [
+    .library(
+      name: "CameraScan",
+      targets: ["CameraScan"]),
+  ],
+  dependencies: [
+  ],
+  targets: [
+    .target(
+      name: "CameraScan",
+      dependencies: []),
+    .testTarget(
+      name: "CameraScanTests",
+      dependencies: ["CameraScan"]),
+  ])
