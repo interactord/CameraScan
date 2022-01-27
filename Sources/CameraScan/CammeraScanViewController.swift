@@ -6,7 +6,20 @@ import UIKit
 
 public final class CameraScanViewController: UIViewController {
 
+  // MARK: Lifecycle
+
+  public init(scanBoxingLayer: DesignConfig.BoxLayer) {
+    self.scanBoxingLayer = scanBoxingLayer
+    super.init(nibName: .none, bundle: .none)
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
   // MARK: Public
+
+  public let scanBoxingLayer: DesignConfig.BoxLayer
 
   public override func viewDidLoad() {
     super.viewDidLoad()
@@ -47,8 +60,8 @@ public final class CameraScanViewController: UIViewController {
 
   // MARK: Private
 
-  private let cameraView: ScanCameraView = {
-    let view = ScanCameraView()
+  private lazy var cameraView: ScanCameraView = {
+    let view = ScanCameraView(scanBoxingLayer: scanBoxingLayer)
     view.translatesAutoresizingMaskIntoConstraints = false
     return view
   }()

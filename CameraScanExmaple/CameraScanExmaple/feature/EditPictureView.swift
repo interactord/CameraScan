@@ -1,17 +1,33 @@
+import CameraScan
 import SwiftUI
 
 // MARK: - EditPictureView
 
 struct EditPictureView: View {
+
+  let image: UIImage
+  let quad: Quadrilateral?
+
   var body: some View {
-    Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+    VStack {
+      CameraScanImageEditView(completed: $isCompleted, image: image, quad: quad) {
+        print($0)
+      }
+      Button(action: {
+        isCompleted.toggle()
+      }) {
+        Text("Done")
+      }
+    }
   }
+
+  @State private var isCompleted: Bool = false
 }
 
 // MARK: - EditPictureView_Previews
 
 struct EditPictureView_Previews: PreviewProvider {
   static var previews: some View {
-    EditPictureView()
+    EditPictureView(image: .init(), quad: .none)
   }
 }

@@ -7,10 +7,16 @@ final class EditScanCornerView: UIView {
 
   // MARK: Lifecycle
 
-  init(frame: CGRect, position: CornerPosition) {
+  init(
+    frame: CGRect,
+    position: CornerPosition,
+    scanEditLayer: DesignConfig.EditPointLayer)
+  {
     self.position = position
+    self.scanEditLayer = scanEditLayer
     super.init(frame: frame)
     prepareUI()
+    apply(isHighlighted: false)
   }
 
   required init?(coder: NSCoder) {
@@ -18,6 +24,8 @@ final class EditScanCornerView: UIView {
   }
 
   // MARK: Public
+
+  public let scanEditLayer: DesignConfig.EditPointLayer
 
   public var strokeColor: CGColor? {
     didSet {
@@ -29,7 +37,16 @@ final class EditScanCornerView: UIView {
 
   let position: CornerPosition
 
-  private(set) var isHighlighted = false
+  private(set) var isHighlighted = false {
+    didSet {
+      apply(isHighlighted: isHighlighted)
+    }
+  }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    layer.cornerRadius = bounds.width / 2.0
+  }
 
   override func draw(_ rect: CGRect) {
     super.draw(rect)
@@ -37,7 +54,6 @@ final class EditScanCornerView: UIView {
     let path: UIBezierPath = .init(ovalIn: rect.insetBy(dx: circleLayer.lineWidth, dy: circleLayer.lineWidth))
     circleLayer.frame = rect
     circleLayer.path = path.cgPath
-
     image?.draw(in: rect)
   }
 
@@ -46,12 +62,16 @@ final class EditScanCornerView: UIView {
   private var image: UIImage?
   private lazy var circleLayer: CAShapeLayer = {
     let layer = CAShapeLayer()
-    layer.fillColor = UIColor.clear.cgColor
-    layer.strokeColor = UIColor.white.cgColor
     layer.lineWidth = 1.0
-
+    layer.fillColor = UIColor.clear.cgColor
     return layer
   }()
+
+  private func apply(isHighlighted: Bool) {
+    circleLayer.strokeColor = scanEditLayer.apply(isEditing: isHighlighted).style.strokeColor.cgColor
+    circleLayer.lineWidth = scanEditLayer.apply(isEditing: isHighlighted).style.strokeWidth
+    circleLayer.fillColor = scanEditLayer.apply(isEditing: isHighlighted).style.fillColor.cgColor
+  }
 
 }
 
@@ -74,7 +94,7 @@ extension EditScanCornerView {
 
   private func prepareUI() {
     backgroundColor = .clear
-    clipsToBounds = false
+    clipsToBounds = true
     layer.addSublayer(circleLayer)
   }
 

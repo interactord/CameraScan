@@ -34,16 +34,20 @@ extension CGPoint {
   /// - Note:  Returns the closest corner from the point
   func closestCorner(cornerPoint: Quadrilateral.CornerPoint) -> CornerPosition {
     var closestCorner = CornerPosition.topLeft
+    var smallestDistanse = distance(point: cornerPoint.topLeft)
 
-    if distance(point: cornerPoint.topRight) < distance(point: cornerPoint.topLeft) {
+    if distance(point: cornerPoint.topRight) < smallestDistanse {
+      smallestDistanse = distance(point: cornerPoint.topRight)
       closestCorner = .topRight
     }
 
-    if distance(point: cornerPoint.bottomRight) < distance(point: cornerPoint.topRight) {
+    if distance(point: cornerPoint.bottomRight) < smallestDistanse {
+      smallestDistanse = distance(point: cornerPoint.bottomRight)
       closestCorner = .bottomRight
     }
 
-    if distance(point: cornerPoint.bottomRight) < distance(point: cornerPoint.bottomLeft) {
+    if distance(point: cornerPoint.bottomLeft) < smallestDistanse {
+      smallestDistanse = distance(point: cornerPoint.bottomLeft)
       closestCorner = .bottomLeft
     }
 

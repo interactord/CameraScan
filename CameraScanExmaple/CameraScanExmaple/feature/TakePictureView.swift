@@ -16,11 +16,13 @@ struct TakePictureView: View {
         didCompletion: { image, model in
           router.navigatedTo(type: .edit(image: image, model: model))
         }, didError: {
+
           print($0.localizedDescription)
         })
 
       VStack {
         Spacer()
+
         VStack {
           HStack {
             Spacer()

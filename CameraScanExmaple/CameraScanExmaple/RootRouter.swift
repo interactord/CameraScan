@@ -21,27 +21,39 @@ final class RootRouter {
     case .back:
       guard stack.count > 1 else { return }
       navigation.popViewController(animated: false)
+    case let .edit(image, model):
+      let controller = makeEdit(image: image, model: model)
+      navigation.pushViewController(controller, animated: true)
     default:
       break
-//    case .edit(image: UIImage, model: Quadrilateral?):
-
     }
   }
 
   // MARK: Private
 
-  private var stack: [String] = []
+  private var stack: [String: UIViewController] = [:]
 
   private let navigation: UINavigationController = .init()
 
-//  private func makeEdit(image: UIImage, model: Quadrilateral) -> UIHostingController<AnyView> {
-//    stack.ap
-//
-//  }
+  private func makeEdit(image: UIImage, model: Quadrilateral?) -> UIHostingController<AnyView> {
+    let view = EditPictureView(image: image, quad: model)
+    let viewController = UIHostingController(rootView: AnyView(view))
+    let viewName = String(describing: view)
+
+    if let prevController = stack[viewName] {
+      prevController.navigationController?.popViewController(animated: false)
+    }
+
+    stack[viewName] = viewController
+    return viewController
+
+  }
 
   private func makeRoot() -> UIHostingController<AnyView> {
     let root = TakePictureView(router: self)
-    stack.append(String(describing: TakePictureView.self))
+    let viewName = String(describing: root)
+    let controller = UIHostingController(rootView: AnyView(root))
+    stack[viewName] = controller
     return UIHostingController(rootView: AnyView(root))
   }
 

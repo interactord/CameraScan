@@ -12,7 +12,20 @@ public protocol CameraScanViewOutputDelegate: AnyObject {
 
 public final class ScanCameraView: UIView {
 
+  // MARK: Lifecycle
+
+  init(scanBoxingLayer: DesignConfig.BoxLayer) {
+    self.scanBoxingLayer = scanBoxingLayer
+    super.init(frame: .zero)
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
   // MARK: Public
+
+  public let scanBoxingLayer: DesignConfig.BoxLayer
 
   public weak var delegate: CameraScanViewOutputDelegate?
 
@@ -49,8 +62,8 @@ public final class ScanCameraView: UIView {
 
   private var captureSessionManager: CaptureSessionManager?
   private let videoPreviewLayer = AVCaptureVideoPreviewLayer()
-  private let quadView: QuadrilateralView = {
-    let view = QuadrilateralView()
+  private lazy var quadView: QuadrilateralView = {
+    let view = QuadrilateralView(scanBoxingLayer: scanBoxingLayer)
     view.editable = false
     view.translatesAutoresizingMaskIntoConstraints = false
     return view

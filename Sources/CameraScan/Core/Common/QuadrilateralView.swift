@@ -7,8 +7,13 @@ final class QuadrilateralView: UIView {
 
   // MARK: Lifecycle
 
-  override init(frame: CGRect) {
-    super.init(frame: frame)
+  init(
+    scanBoxingLayer: DesignConfig.BoxLayer = .defaultValue(),
+    scanEditLayer: DesignConfig.EditPointLayer = .defaultValue())
+  {
+    self.scanBoxingLayer = scanBoxingLayer
+    self.scanEditLayer = scanEditLayer
+    super.init(frame: .zero)
     applyLayout()
   }
 
@@ -18,24 +23,22 @@ final class QuadrilateralView: UIView {
 
   // MARK: Public
 
+  public let scanBoxingLayer: DesignConfig.BoxLayer
+  public let scanEditLayer: DesignConfig.EditPointLayer
+
   public var editable = false {
     didSet {
       cornerViews.forEach { $0.isHidden = !editable }
-      quadLayer.fillColor = editable
-        ? UIColor(white: .zero, alpha: 0.6).cgColor
-        : UIColor(white: 1.0, alpha: 0.5).cgColor
+
+      quadLayer.fillColor = scanBoxingLayer.apply(isEditing: editable).fillColor.cgColor
+      quadLayer.strokeColor = scanEditLayer.apply(isEditing: editable).style.strokeColor.cgColor
+      quadLayer.lineWidth = scanEditLayer.apply(isEditing: editable).style.strokeWidth
+
       guard let quad = quad else { return }
       draw(quad: quad, animated: false)
       zip(cornerViews, quad.cornerPoint.list).forEach {
         $0.0.center = $0.1
       }
-    }
-  }
-
-  public var strokeColor: CGColor? {
-    didSet {
-      quadLayer.strokeColor = strokeColor
-      cornerViews.forEach { $0.strokeColor = strokeColor }
     }
   }
 
@@ -54,18 +57,10 @@ final class QuadrilateralView: UIView {
 
   // MARK: Private
 
-  private struct Const {
-    static let highlightedCornerViewSize = CGSize(width: 75.0, height: 75.0)
-    static let cornerViewSize = CGSize(width: 20.0, height: 20.0)
-  }
-
-  private let quadLayer: CAShapeLayer = {
+  private lazy var quadLayer: CAShapeLayer = {
     let layer = CAShapeLayer()
-    layer.strokeColor = UIColor.white.cgColor
-    layer.lineWidth = 1.0
     layer.opacity = 1.0
     layer.isHidden = true
-
     return layer
   }()
 
@@ -77,25 +72,26 @@ final class QuadrilateralView: UIView {
     return view
   }()
 
-  private let cornerViews: [EditScanCornerView] = {
+  private lazy var cornerViews: [EditScanCornerView] = {
     let position: [CornerPosition] = [
       CornerPosition.topLeft,
       CornerPosition.topRight,
       CornerPosition.bottomRight,
       CornerPosition.bottomLeft,
     ]
-    let rect = CGRect(origin: .zero, size: .init(width: 75, height: 75))
-    return position.map {
-      .init(frame: rect, position: $0)
+    let rect = CGRect(origin: .zero, size: scanEditLayer.noEdit.squareSize.convertSize())
+    return position.map { [weak self] in
+      .init(frame: rect, position: $0, scanEditLayer: self?.scanEditLayer ?? .defaultValue())
     }
   }()
 
   private var isHighlighted = false {
     didSet(oldValue) {
       guard oldValue != isHighlighted else { return }
-      quadLayer.fillColor = isHighlighted
-        ? UIColor.clear.cgColor
-        : UIColor(white: .zero, alpha: 0.6).cgColor
+      quadLayer.fillColor = isHighlighted ? UIColor.clear.cgColor : scanBoxingLayer.edit.fillColor.cgColor
+      quadLayer.strokeColor = scanBoxingLayer.edit.strokeColor.cgColor
+      quadLayer.lineWidth = scanBoxingLayer.edit.strokeWidth
+
       isHighlighted
         ? bringSubviewToFront(quadView)
         : sendSubviewToBack(quadView)
@@ -145,11 +141,12 @@ extension QuadrilateralView {
       return
     }
 
-    let diffSize = Const.highlightedCornerViewSize.subtraction(size: Const.cornerViewSize).half
+    let diffSize = scanEditLayer.edit.squareSize.convertSize()
+      .subtraction(size: scanEditLayer.noEdit.squareSize.convertSize()).half
     let origin = CGPoint(
       x: cornerView.frame.origin.x - diffSize.width,
       y: cornerView.frame.origin.y - diffSize.height)
-    cornerView.frame = .init(origin: origin, size: Const.highlightedCornerViewSize)
+    cornerView.frame = .init(origin: origin, size: scanEditLayer.edit.squareSize.convertSize())
     cornerView.highlight(image: image)
   }
 
@@ -160,21 +157,22 @@ extension QuadrilateralView {
     }
   }
 
+  func getCornerView(by position: CornerPosition) -> EditScanCornerView? {
+    cornerViews.first(where: { $0.position == position })
+  }
+
   // MARK: Private
 
   private func resetHighlight(cornerView: EditScanCornerView) {
     cornerView.reset()
 
-    let diffSize = cornerView.frame.size.subtraction(size: Const.cornerViewSize).half
+    let diffSize = cornerView.frame.size
+      .subtraction(size: scanEditLayer.noEdit.squareSize.convertSize()).half
     let origin = CGPoint(
       x: cornerView.frame.origin.x + diffSize.width,
       y: cornerView.frame.origin.y + diffSize.height)
-    cornerView.frame = .init(origin: origin, size: Const.cornerViewSize)
+    cornerView.frame = .init(origin: origin, size: scanEditLayer.noEdit.squareSize.convertSize())
     cornerView.setNeedsDisplay()
-  }
-
-  private func getCornerView(by position: CornerPosition) -> EditScanCornerView? {
-    cornerViews.first(where: { $0.position == position })
   }
 
   private func applyLayout() {
@@ -191,10 +189,9 @@ extension QuadrilateralView {
     quadView.layer.addSublayer(quadLayer)
   }
 
-  private func draw(quad: Quadrilateral?, animated: Bool) {
-    guard let quad = quad else { return }
-
+  private func draw(quad: Quadrilateral, animated: Bool) {
     var path = quad.path
+
     if editable {
       path = path.reversing()
       let rectPath = UIBezierPath(rect: bounds)
@@ -237,15 +234,21 @@ extension QuadrilateralView {
       quad.cornerPoint.topLeft = position
     case .topRight:
       quad.cornerPoint.topRight = position
-    case .bottomLeft:
-      quad.cornerPoint.bottomLeft = position
     case .bottomRight:
       quad.cornerPoint.bottomRight = position
+    case .bottomLeft:
+      quad.cornerPoint.bottomLeft = position
     }
 
     return quad
   }
 
+}
+
+extension CGFloat {
+  fileprivate func convertSize() -> CGSize {
+    .init(width: self, height: self)
+  }
 }
 
 extension CGSize {
