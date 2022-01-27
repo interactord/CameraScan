@@ -8,19 +8,9 @@ public protocol CameraScanViewOutputDelegate: AnyObject {
   func captureImage(result: Result<(UIImage, Quadrilateral?), CameraScanError>)
 }
 
-// MARK: - CameraScanViewController
+// MARK: - ScanCameraView
 
-public final class CameraScanViewController: UIViewController {
-
-  // MARK: Lifecycle
-
-  public init() {
-    super.init(nibName: .none, bundle: .none)
-  }
-
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
+public final class ScanCameraView: UIView {
 
   // MARK: Public
 
@@ -32,27 +22,25 @@ public final class CameraScanViewController: UIViewController {
     }
   }
 
-  public override func viewDidLoad() {
-    super.viewDidLoad()
+  // MARK: Internal
+
+  func viewDidLoad() {
     prepareUI()
     applyLayout()
     applyBinding()
   }
 
-  public override func viewDidLayoutSubviews() {
-    super.viewDidLayoutSubviews()
-    videoPreviewLayer.frame = view.layer.bounds
+  func viewDidLayoutSubviews() {
+    videoPreviewLayer.frame = layer.bounds
   }
 
-  public override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
+  func viewWillAppear(_ animated: Bool) {
     UIApplication.shared.isIdleTimerDisabled = true
     CaptureSession.current.isEditing = false
     captureSessionManager?.start()
   }
 
-  public override func viewWillDisappear(_ animated: Bool) {
-    super.viewWillDisappear(animated)
+  func viewWillDisappear(_ animated: Bool) {
     UIApplication.shared.isIdleTimerDisabled = false
     captureSessionManager?.stop()
   }
@@ -71,7 +59,7 @@ public final class CameraScanViewController: UIViewController {
 
 }
 
-extension CameraScanViewController {
+extension ScanCameraView {
 
   // MARK: Public
 
@@ -82,20 +70,20 @@ extension CameraScanViewController {
   // MARK: Private
 
   private func prepareUI() {
-    view.backgroundColor = .darkGray
+    backgroundColor = .darkGray
     captureSessionManager = .init(videoPreviewLayer: videoPreviewLayer)
     captureSessionManager?.delegate = self
   }
 
   private func applyLayout() {
-    view.layer.addSublayer(videoPreviewLayer)
-    view.addSubview(quadView)
+    layer.addSublayer(videoPreviewLayer)
+    addSubview(quadView)
 
     NSLayoutConstraint.activate([
-      quadView.topAnchor.constraint(equalTo: view.topAnchor),
-      view.bottomAnchor.constraint(equalTo: quadView.bottomAnchor),
-      view.trailingAnchor.constraint(equalTo: quadView.trailingAnchor),
-      quadView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+      quadView.topAnchor.constraint(equalTo: topAnchor),
+      bottomAnchor.constraint(equalTo: quadView.bottomAnchor),
+      trailingAnchor.constraint(equalTo: quadView.trailingAnchor),
+      quadView.leadingAnchor.constraint(equalTo: leadingAnchor),
     ])
   }
 
@@ -121,7 +109,7 @@ extension CameraScanViewController {
 
 // MARK: RectangleDetectionDelegateProtocol
 
-extension CameraScanViewController: RectangleDetectionDelegateProtocol {
+extension ScanCameraView: RectangleDetectionDelegateProtocol {
   func didStartCapturingPicture(sessionManager: CaptureSessionManager) {
     sessionManager.stop()
   }

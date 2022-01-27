@@ -99,7 +99,7 @@ final class CaptureSessionManager: NSObject {
   private let videoPreviewLayer: AVCaptureVideoPreviewLayer
   private let captureSession: AVCaptureSession = .init()
   private let funnel = RectangleFeaturesFunnel()
-  private var displyedRectanleResult: RectangleDetectorResult?
+  private var displayedRectangleResult: RectangleDetectorResult?
   private var photoOutput = AVCapturePhotoOutput()
 
   /// - Note: Whether the CaptureSessionManager should be detecting quadrilaterals.
@@ -157,7 +157,7 @@ extension CaptureSessionManager {
 
   private func process(rectangle: Quadrilateral, imageSize: CGSize) {
     noRectanleCount = .zero
-    funnel.add(feature: rectangle, current: displyedRectanleResult?.rectanle) { [weak self] result, _ in
+    funnel.add(feature: rectangle, current: displayedRectangleResult?.rectanle) { [weak self] result, _ in
       let shouldAutoScan = result == .showAndAutoScan
       self?.displayRectangle(result: .init(rectanle: rectangle, imageSize: imageSize))
       if shouldAutoScan, CaptureSession.current.isAutoScanEnabled, !CaptureSession.current.isEditing {
@@ -173,13 +173,14 @@ extension CaptureSessionManager {
 
       guard self.noRectanleCount > Const.noRectangleThreshold else { return }
       self.funnel.currentAutoScanPassCount = .zero
-      self.displyedRectanleResult = .none
+      self.displayedRectangleResult = .none
       self.delegate?.captureSessionManager(self, didDetectQuad: .none, imageSize: imageSize)
     }
   }
 
   @discardableResult
   private func displayRectangle(result: RectangleDetectorResult) -> Quadrilateral {
+    displayedRectangleResult = result
     let quad = result.rectanle.toCartesian(height: result.imageSize.height)
 
     DispatchQueue.main.async { [weak self] in
@@ -257,7 +258,7 @@ extension CaptureSessionManager: AVCapturePhotoCaptureDelegate {
       }
 
       var quad: Quadrilateral?
-      if let result = self?.displyedRectanleResult {
+      if let result = self?.displayedRectangleResult {
         quad = self?.displayRectangle(result: result)
           .scale(from: result.imageSize, to: image.size, angle: angle)
       }

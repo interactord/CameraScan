@@ -5,31 +5,36 @@ import UIKit
 
 public struct CameraScanView {
   public init(
+    captured: Binding<Bool>,
     didCompletion: @escaping (UIImage, Quadrilateral?) -> Void,
     didError: @escaping (CameraScanError) -> Void)
   {
+    self.captured = captured
     self.didCompletion = didCompletion
     self.didError = didError
   }
 
   let didCompletion: (UIImage, Quadrilateral?) -> Void
   let didError: (CameraScanError) -> Void
+  let captured: Binding<Bool>
 }
 
 // MARK: UIViewControllerRepresentable
 
 extension CameraScanView: UIViewControllerRepresentable {
+
   public func makeCoordinator() -> Coordinator {
     Coordinator(didCompletion: didCompletion, didError: didError)
   }
 
   public func makeUIViewController(context: Context) -> CameraScanViewController {
-    let controller = CameraScanViewController()
-    controller.delegate = context.coordinator
+    let controller = CameraScanViewController(nibName: .none, bundle: .none)
+    controller.cameraDelegate = context.coordinator
     return controller
   }
 
   public func updateUIViewController(_ uiViewController: CameraScanViewController, context: Context) {
+    uiViewController.isCaptured = captured.wrappedValue
   }
 
 }

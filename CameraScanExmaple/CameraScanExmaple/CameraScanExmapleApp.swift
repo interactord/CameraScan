@@ -4,7 +4,7 @@ import SwiftUI
 struct CameraScanExmapleApp: App {
   var body: some Scene {
     WindowGroup {
-      ContentView()
+      RootRouter.start()
     }
   }
 }

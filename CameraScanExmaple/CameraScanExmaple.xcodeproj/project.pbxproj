@@ -8,18 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		2916B789279FA9B8006C4B88 /* CameraScanExmapleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2916B788279FA9B8006C4B88 /* CameraScanExmapleApp.swift */; };
-		2916B78B279FA9B8006C4B88 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2916B78A279FA9B8006C4B88 /* ContentView.swift */; };
+		2916B78B279FA9B8006C4B88 /* TakePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2916B78A279FA9B8006C4B88 /* TakePictureView.swift */; };
 		2916B78D279FA9B9006C4B88 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2916B78C279FA9B9006C4B88 /* Assets.xcassets */; };
 		2916B790279FA9B9006C4B88 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2916B78F279FA9B9006C4B88 /* Preview Assets.xcassets */; };
 		2916B7A1279FAC02006C4B88 /* CameraScan in Frameworks */ = {isa = PBXBuildFile; productRef = 2916B7A0279FAC02006C4B88 /* CameraScan */; };
+		29AA53DF27A295620034C884 /* RootRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AA53DE27A295620034C884 /* RootRouter.swift */; };
+		29AA53FC27A2B5C50034C884 /* EditPictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AA53FB27A2B5C50034C884 /* EditPictureView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2916B785279FA9B8006C4B88 /* CameraScanExmaple.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CameraScanExmaple.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2916B788279FA9B8006C4B88 /* CameraScanExmapleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraScanExmapleApp.swift; sourceTree = "<group>"; };
-		2916B78A279FA9B8006C4B88 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2916B78A279FA9B8006C4B88 /* TakePictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakePictureView.swift; sourceTree = "<group>"; };
 		2916B78C279FA9B9006C4B88 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2916B78F279FA9B9006C4B88 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		29AA53DE27A295620034C884 /* RootRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootRouter.swift; sourceTree = "<group>"; };
+		29AA53FB27A2B5C50034C884 /* EditPictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPictureView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,8 +57,9 @@
 		2916B787279FA9B8006C4B88 /* CameraScanExmaple */ = {
 			isa = PBXGroup;
 			children = (
+				29AA53FA27A2B5B00034C884 /* feature */,
 				2916B788279FA9B8006C4B88 /* CameraScanExmapleApp.swift */,
-				2916B78A279FA9B8006C4B88 /* ContentView.swift */,
+				29AA53DE27A295620034C884 /* RootRouter.swift */,
 				2916B78C279FA9B9006C4B88 /* Assets.xcassets */,
 				2916B78E279FA9B9006C4B88 /* Preview Content */,
 			);
@@ -67,6 +72,15 @@
 				2916B78F279FA9B9006C4B88 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		29AA53FA27A2B5B00034C884 /* feature */ = {
+			isa = PBXGroup;
+			children = (
+				2916B78A279FA9B8006C4B88 /* TakePictureView.swift */,
+				29AA53FB27A2B5C50034C884 /* EditPictureView.swift */,
+			);
+			path = feature;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -145,7 +159,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2916B78B279FA9B8006C4B88 /* ContentView.swift in Sources */,
+				2916B78B279FA9B8006C4B88 /* TakePictureView.swift in Sources */,
+				29AA53FC27A2B5C50034C884 /* EditPictureView.swift in Sources */,
+				29AA53DF27A295620034C884 /* RootRouter.swift in Sources */,
 				2916B789279FA9B8006C4B88 /* CameraScanExmapleApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -204,7 +220,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -259,7 +275,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -277,8 +293,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"CameraScanExmaple/Preview Content\"";
+				DEVELOPMENT_TEAM = 7836J6Z5N8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Used to scan images.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Used to select images from your Photo Library.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -289,7 +308,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = io.interactord.CameraScanExmaple;
+				PRODUCT_BUNDLE_IDENTIFIER = icom.flitto.previewer.CameraScanExmaple;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -305,8 +324,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"CameraScanExmaple/Preview Content\"";
+				DEVELOPMENT_TEAM = 7836J6Z5N8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Used to scan images.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Used to select images from your Photo Library.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -317,7 +339,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = io.interactord.CameraScanExmaple;
+				PRODUCT_BUNDLE_IDENTIFIER = icom.flitto.previewer.CameraScanExmaple;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
