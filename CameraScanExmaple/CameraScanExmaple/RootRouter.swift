@@ -22,10 +22,9 @@ final class RootRouter {
       guard stack.count > 1 else { return }
       navigation.popViewController(animated: false)
     case let .edit(image, model):
-      let controller = makeEdit(image: image, model: model)
-      navigation.pushViewController(controller, animated: true)
-    default:
-      break
+      navigation.pushViewController(makeEdit(image: image, model: model), animated: true)
+    case let .flatImage(image):
+      navigation.pushViewController(makeFlatImage(image: image), animated: true)
     }
   }
 
@@ -36,7 +35,7 @@ final class RootRouter {
   private let navigation: UINavigationController = .init()
 
   private func makeEdit(image: UIImage, model: Quadrilateral?) -> UIHostingController<AnyView> {
-    let view = EditPictureView(image: image, quad: model)
+    let view = EditPictureView(image: image, quad: model, router: self)
     let viewController = UIHostingController(rootView: AnyView(view))
     let viewName = String(describing: view)
 
@@ -47,6 +46,19 @@ final class RootRouter {
     stack[viewName] = viewController
     return viewController
 
+  }
+
+  private func makeFlatImage(image: UIImage) -> UIHostingController<AnyView> {
+    let view = FlatImageView(image: image)
+    let viewController = UIHostingController(rootView: AnyView(view))
+    let viewName = String(describing: view)
+
+    if let prevController = stack[viewName] {
+      prevController.navigationController?.popViewController(animated: false)
+    }
+
+    stack[viewName] = viewController
+    return viewController
   }
 
   private func makeRoot() -> UIHostingController<AnyView> {
@@ -63,6 +75,7 @@ extension RootRouter {
   enum RouteType {
     case back
     case edit(image: UIImage, model: Quadrilateral?)
+    case flatImage(image: UIImage)
   }
 }
 
