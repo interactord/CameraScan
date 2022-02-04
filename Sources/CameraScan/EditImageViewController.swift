@@ -17,10 +17,12 @@ public final class EditImageViewController: UIViewController {
   public init(
     image: UIImage,
     quad: Quadrilateral?,
-    isRotateImage: Bool)
+    isRotateImage: Bool,
+    errorAction: @escaping (CameraScanError) -> Void)
   {
     self.image = isRotateImage ? image.applyingPortraitOrientation() : image
     self.quad = quad ?? .defaultValueByOffset(image: image)
+    erroAction = errorAction
     super.init(nibName: .none, bundle: .none)
   }
 
@@ -33,8 +35,10 @@ public final class EditImageViewController: UIViewController {
   public var isCropped: Bool = false {
     didSet {
       guard isCropped else { return }
-      cropImage()
       isCropped = false
+
+      guard let cropImage = flatImage() else { return }
+      delegate?.cropped(image: cropImage)
     }
   }
 
@@ -77,6 +81,7 @@ public final class EditImageViewController: UIViewController {
   private var zoomGestureController: ZoomGestureController!
   private var quadViewWidthConstraint = NSLayoutConstraint()
   private var quadViewHeightContraint = NSLayoutConstraint()
+  private let erroAction: (CameraScanError) -> Void
 }
 
 extension EditImageViewController {
@@ -104,6 +109,30 @@ extension EditImageViewController {
 
     delegate?.cropped(image: .make(ciImage: filtedImage))
 
+  }
+
+  public func flatImage() -> UIImage? {
+    guard let quad = quadView.quad, let ciImage = CIImage(image: image) else {
+      erroAction(.ciImageCreation)
+      return .none
+    }
+
+    let cgOrientation = CGImagePropertyOrientation(image.imageOrientation)
+    let orientedImage = ciImage.oriented(forExifOrientation: .init(cgOrientation.rawValue))
+    let scaledQuad = quad.scale(from: quadView.bounds.size, to: image.size)
+    self.quad = scaledQuad
+
+    var cartesianScaledQuad = scaledQuad.toCartesian(height: image.size.height)
+    cartesianScaledQuad.reorganize()
+
+    let filteredImage = orientedImage.applyingFilter("CIPerspectiveCorrection", parameters: [
+      "inputTopLeft": CIVector(cgPoint: cartesianScaledQuad.cornerPoint.bottomLeft),
+      "inputTopRight": CIVector(cgPoint: cartesianScaledQuad.cornerPoint.bottomRight),
+      "inputBottomLeft": CIVector(cgPoint: cartesianScaledQuad.cornerPoint.topLeft),
+      "inputBottomRight": CIVector(cgPoint: cartesianScaledQuad.cornerPoint.topRight),
+    ])
+
+    return .from(ciImage: filteredImage)
   }
 
   public func rotateImage() {
@@ -214,6 +243,15 @@ extension UIImage {
 
   // MARK: Internal
 
+  /// -Note: Creates a UIImage from the specified CIImage.
+  static func from(ciImage: CIImage) -> UIImage {
+    guard let cgImage = CIContext(options: .none).createCGImage(ciImage, from: ciImage.extent) else {
+      return .init(ciImage: ciImage, scale: 1.0, orientation: .up)
+    }
+
+    return .init(cgImage: cgImage)
+  }
+
   /// - Note: Returns the same image with a portrait orientation.
   func applyingPortraitOrientation() -> UIImage {
     switch imageOrientation {
@@ -278,6 +316,7 @@ extension UIImage {
 
     return newImage
   }
+
 }
 
 extension CGAffineTransform {
@@ -285,4 +324,44 @@ extension CGAffineTransform {
     let scale = max(toSize.width / fromSize.width, toSize.height / fromSize.height)
     return .init(scaleX: scale, y: scale)
   }
+}
+
+extension CGImagePropertyOrientation {
+  fileprivate init(_ uiOrientation: UIImage.Orientation) {
+    switch uiOrientation {
+    case .up:
+      self = .up
+    case .upMirrored:
+      self = .upMirrored
+    case .down:
+      self = .down
+    case .downMirrored:
+      self = .downMirrored
+    case .left:
+      self = .left
+    case .leftMirrored:
+      self = .leftMirrored
+    case .right:
+      self = .right
+    case .rightMirrored:
+      self = .rightMirrored
+    @unknown default:
+      assertionFailure("Unknow orientation, falling to default")
+      self = .right
+    }
+  }
+}
+
+extension Bundle {
+
+  // MARK: Internal
+
+  static var framework: Bundle {
+    .init(for: ClassBundle.self)
+  }
+
+  // MARK: Private
+
+  private class ClassBundle {}
+
 }

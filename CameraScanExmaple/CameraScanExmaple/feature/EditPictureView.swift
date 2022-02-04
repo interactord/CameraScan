@@ -12,9 +12,15 @@ struct EditPictureView: View {
 
   var body: some View {
     VStack {
-      CameraScanImageEditView(completed: $isCompleted, image: image, quad: quad, isRotateImage: isRotateImage) {
-        router.navigatedTo(type: .flatImage(image: $0))
-      }
+      CameraScanImageEditView(
+        completed: $isCompleted,
+        image: image,
+        quad: quad,
+        isRotateImage: isRotateImage,
+        didCroppedImage: { router.navigatedTo(type: .flatImage(image: $0)) },
+        errorAction: { error in
+          print(error.errorDescription ?? "")
+        })
       Button(action: {
         isCompleted.toggle()
       }) {

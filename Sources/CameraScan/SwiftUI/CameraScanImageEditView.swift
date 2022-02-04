@@ -13,7 +13,8 @@ public struct CameraScanImageEditView {
     quad: Quadrilateral?,
     strokeColor: UIColor? = .none,
     isRotateImage: Bool,
-    didCroppedImage: @escaping (UIImage) -> Void)
+    didCroppedImage: @escaping (UIImage) -> Void,
+    errorAction: @escaping (CameraScanError) -> Void)
   {
     self.completed = completed
     self.image = image
@@ -21,6 +22,7 @@ public struct CameraScanImageEditView {
     self.strokeColor = strokeColor
     self.isRotateImage = isRotateImage
     self.didCroppedImage = didCroppedImage
+    self.errorAction = errorAction
   }
 
   // MARK: Private
@@ -31,6 +33,7 @@ public struct CameraScanImageEditView {
   private let strokeColor: UIColor?
   private let isRotateImage: Bool
   private let didCroppedImage: (UIImage) -> Void
+  private let errorAction: (CameraScanError) -> Void
 
 }
 
@@ -42,7 +45,8 @@ extension CameraScanImageEditView: UIViewControllerRepresentable {
     let controller = EditImageViewController(
       image: image,
       quad: quad,
-      isRotateImage: isRotateImage)
+      isRotateImage: isRotateImage,
+      errorAction: errorAction)
     controller.delegate = context.coordinator
     return controller
   }
@@ -87,6 +91,7 @@ struct CameraScanEditView_Previews: PreviewProvider {
       image: .init(),
       quad: .none,
       isRotateImage: false,
-      didCroppedImage: { _ in })
+      didCroppedImage: { _ in },
+      errorAction: { _ in })
   }
 }
