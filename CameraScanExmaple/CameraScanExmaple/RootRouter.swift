@@ -21,10 +21,14 @@ final class RootRouter {
     case .back:
       guard stack.count > 1 else { return }
       navigation.popViewController(animated: false)
+    case .selectAPicture:
+      navigation.pushViewController(makeTakePictureView(), animated: true)
     case let .edit(image, model):
       navigation.pushViewController(makeEdit(image: image, model: model), animated: true)
     case let .flatImage(image):
       navigation.pushViewController(makeFlatImage(image: image), animated: true)
+    case .takeAPicture:
+      navigation.pushViewController(makeTakePictureView(), animated: true)
     }
   }
 
@@ -33,6 +37,19 @@ final class RootRouter {
   private var stack: [String: UIViewController] = [:]
 
   private let navigation: UINavigationController = .init()
+
+  private func makeHome() -> UIHostingController<AnyView> {
+    let view = HomeView(router: self)
+    let viewContrlller = UIHostingController(rootView: AnyView(view))
+    let viewName = String(describing: view)
+
+    if let prevController = stack[viewName] {
+      prevController.navigationController?.popViewController(animated: false)
+    }
+
+    stack[viewName] = viewContrlller
+    return viewContrlller
+  }
 
   private func makeEdit(image: UIImage, model: Quadrilateral?) -> UIHostingController<AnyView> {
     let view = EditPictureView(image: image, quad: model, router: self)
@@ -61,7 +78,7 @@ final class RootRouter {
     return viewController
   }
 
-  private func makeRoot() -> UIHostingController<AnyView> {
+  private func makeTakePictureView() -> UIHostingController<AnyView> {
     let root = TakePictureView(router: self)
     let viewName = String(describing: root)
     let controller = UIHostingController(rootView: AnyView(root))
@@ -74,6 +91,8 @@ final class RootRouter {
 extension RootRouter {
   enum RouteType {
     case back
+    case takeAPicture
+    case selectAPicture
     case edit(image: UIImage, model: Quadrilateral?)
     case flatImage(image: UIImage)
   }
@@ -84,7 +103,7 @@ extension RootRouter {
   static func start() -> AnyView {
     let router = RootRouter()
     let navigation = router.navigation
-    navigation.setViewControllers([ router.makeRoot() ], animated: false)
+    navigation.setViewControllers([ router.makeHome() ], animated: false)
     return AnyView(RootNavigation(navigation: navigation))
   }
 }
