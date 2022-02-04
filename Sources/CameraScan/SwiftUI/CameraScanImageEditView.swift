@@ -5,25 +5,33 @@ import UIKit
 
 public struct CameraScanImageEditView {
 
-  private let completed: Binding<Bool>
-  private let image: UIImage
-  private let quad: Quadrilateral?
-  private let strokeColor: UIColor?
-  private let didCroppedImage: (UIImage) -> Void
+  // MARK: Lifecycle
 
   public init(
     completed: Binding<Bool>,
     image: UIImage,
     quad: Quadrilateral?,
     strokeColor: UIColor? = .none,
+    isRotateImage: Bool,
     didCroppedImage: @escaping (UIImage) -> Void)
   {
     self.completed = completed
     self.image = image
     self.quad = quad
     self.strokeColor = strokeColor
+    self.isRotateImage = isRotateImage
     self.didCroppedImage = didCroppedImage
   }
+
+  // MARK: Private
+
+  private let completed: Binding<Bool>
+  private let image: UIImage
+  private let quad: Quadrilateral?
+  private let strokeColor: UIColor?
+  private let isRotateImage: Bool
+  private let didCroppedImage: (UIImage) -> Void
+
 }
 
 // MARK: UIViewControllerRepresentable
@@ -33,7 +41,8 @@ extension CameraScanImageEditView: UIViewControllerRepresentable {
   public func makeUIViewController(context: Context) -> EditImageViewController {
     let controller = EditImageViewController(
       image: image,
-      quad: quad)
+      quad: quad,
+      isRotateImage: isRotateImage)
     controller.delegate = context.coordinator
     return controller
   }
@@ -77,6 +86,7 @@ struct CameraScanEditView_Previews: PreviewProvider {
       completed: .constant(false),
       image: .init(),
       quad: .none,
+      isRotateImage: false,
       didCroppedImage: { _ in })
   }
 }

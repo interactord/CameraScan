@@ -17,9 +17,9 @@ public final class EditImageViewController: UIViewController {
   public init(
     image: UIImage,
     quad: Quadrilateral?,
-    rotateImage: Bool = true)
+    isRotateImage: Bool)
   {
-    self.image = rotateImage ? image.applyingPortraitOrientation() : image
+    self.image = isRotateImage ? image.applyingPortraitOrientation() : image
     self.quad = quad ?? .defaultValueByOffset(image: image)
     super.init(nibName: .none, bundle: .none)
   }
@@ -40,8 +40,8 @@ public final class EditImageViewController: UIViewController {
 
   public override func viewDidLoad() {
     super.viewDidLoad()
-    prepareUI()
     applyLayout()
+    prepareUI()
   }
 
   public override func viewDidLayoutSubviews() {
@@ -74,9 +74,7 @@ public final class EditImageViewController: UIViewController {
     view.translatesAutoresizingMaskIntoConstraints = false
     return view
   }()
-  private lazy var zoomGestureController: ZoomGestureController = {
-    .init(image: image, quadView: quadView)
-  }()
+  private var zoomGestureController: ZoomGestureController!
   private var quadViewWidthConstraint = NSLayoutConstraint()
   private var quadViewHeightContraint = NSLayoutConstraint()
 }
@@ -186,6 +184,7 @@ extension EditImageViewController {
   }
 
   private func prepareUI() {
+    zoomGestureController = .init(image: image, quadView: quadView)
     addLongGesture(controller: zoomGestureController)
   }
 
@@ -207,7 +206,7 @@ extension Quadrilateral {
       topLeft: .init(x: offset, y: offset),
       topRight: .init(x: image.size.width - offset, y: offset),
       bottomLeft: .init(x: offset, y: image.size.height - offset),
-      bottomRight: .init(x: offset, y: image.size.height - offset)))
+      bottomRight: .init(x: image.size.width - offset, y: image.size.height - offset)))
   }
 }
 

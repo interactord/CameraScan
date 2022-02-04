@@ -14,9 +14,8 @@ struct TakePictureView: View {
       CameraScanView(
         captured: $isCaptured,
         didCompletion: { image, model in
-          router.navigatedTo(type: .edit(image: image, model: model))
+          router.navigatedTo(type: .edit(image: image, model: model, isRotateImage: true))
         }, didError: {
-
           print($0.localizedDescription)
         })
 

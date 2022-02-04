@@ -7,11 +7,12 @@ struct EditPictureView: View {
 
   let image: UIImage
   let quad: Quadrilateral?
+  let isRotateImage: Bool
   let router: RootRouter
 
   var body: some View {
     VStack {
-      CameraScanImageEditView(completed: $isCompleted, image: image, quad: quad) {
+      CameraScanImageEditView(completed: $isCompleted, image: image, quad: quad, isRotateImage: isRotateImage) {
         router.navigatedTo(type: .flatImage(image: $0))
       }
       Button(action: {
@@ -29,6 +30,6 @@ struct EditPictureView: View {
 
 struct EditPictureView_Previews: PreviewProvider {
   static var previews: some View {
-    EditPictureView(image: .init(), quad: .none, router: RootRouter.shared)
+    EditPictureView(image: .init(), quad: .none, isRotateImage: false, router: RootRouter.shared)
   }
 }

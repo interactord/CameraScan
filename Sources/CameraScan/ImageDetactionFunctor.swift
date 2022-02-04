@@ -15,12 +15,37 @@ public struct ImageDetactionFunctor: ImageDetactionFunctorable {
 
   public func detact(image: UIImage, completion: @escaping (Quadrilateral?) -> Void) {
     guard let ciImage = CIImage(image: image) else { return }
-    guard let orientation = CGImagePropertyOrientation(rawValue: .init(image.imageOrientation.rawValue)) else { return }
-
-    let orientedImage = ciImage.oriented(orientation)
+    let orientation = CGImagePropertyOrientation(image.imageOrientation)
+    let orientedImage = ciImage.oriented(forExifOrientation: .init(orientation.rawValue))
 
     VisionRectangleDetector.rectangle(image: ciImage, orientation: orientation) { quad in
       completion(quad?.toCartesian(height: orientedImage.extent.height))
+    }
+  }
+}
+
+extension CGImagePropertyOrientation {
+  fileprivate init(_ uiOrientation: UIImage.Orientation) {
+    switch uiOrientation {
+    case .up:
+      self = .up
+    case .upMirrored:
+      self = .upMirrored
+    case .down:
+      self = .down
+    case .downMirrored:
+      self = .downMirrored
+    case .left:
+      self = .left
+    case .leftMirrored:
+      self = .leftMirrored
+    case .right:
+      self = .right
+    case .rightMirrored:
+      self = .rightMirrored
+    @unknown default:
+      assertionFailure("Unknow orientation, falling to default")
+      self = .right
     }
   }
 }

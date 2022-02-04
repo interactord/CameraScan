@@ -23,8 +23,8 @@ final class RootRouter {
       navigation.popViewController(animated: false)
     case .selectAPicture:
       navigation.pushViewController(makeTakePictureView(), animated: true)
-    case let .edit(image, model):
-      navigation.pushViewController(makeEdit(image: image, model: model), animated: true)
+    case let .edit(image, model, isRotateImage):
+      navigation.pushViewController(makeEdit(image: image, model: model, isRotateImage: isRotateImage), animated: true)
     case let .flatImage(image):
       navigation.pushViewController(makeFlatImage(image: image), animated: true)
     case .takeAPicture:
@@ -51,8 +51,8 @@ final class RootRouter {
     return viewContrlller
   }
 
-  private func makeEdit(image: UIImage, model: Quadrilateral?) -> UIHostingController<AnyView> {
-    let view = EditPictureView(image: image, quad: model, router: self)
+  private func makeEdit(image: UIImage, model: Quadrilateral?, isRotateImage: Bool) -> UIHostingController<AnyView> {
+    let view = EditPictureView(image: image, quad: model, isRotateImage: isRotateImage, router: self)
     let viewController = UIHostingController(rootView: AnyView(view))
     let viewName = String(describing: view)
 
@@ -93,7 +93,7 @@ extension RootRouter {
     case back
     case takeAPicture
     case selectAPicture
-    case edit(image: UIImage, model: Quadrilateral?)
+    case edit(image: UIImage, model: Quadrilateral?, isRotateImage: Bool)
     case flatImage(image: UIImage)
   }
 }
