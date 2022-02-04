@@ -48,7 +48,6 @@ public final class CameraScanViewController: UIViewController {
     didSet {
       guard isCaptured else { return }
       cameraView.capture()
-      isCaptured = false
     }
   }
 

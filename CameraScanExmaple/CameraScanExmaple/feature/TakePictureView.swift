@@ -32,7 +32,6 @@ struct TakePictureView: View {
             }
             .padding(.bottom, UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? .zero)
             .padding(.top, 20)
-            .disabled(isCaptured)
             Spacer()
           }
         }

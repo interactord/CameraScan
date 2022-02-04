@@ -5,6 +5,8 @@ import SwiftUI
 
 struct EditPictureView: View {
 
+  // MARK: Internal
+
   let image: UIImage
   let quad: Quadrilateral?
   let isRotateImage: Bool
@@ -28,6 +30,8 @@ struct EditPictureView: View {
       }
     }
   }
+
+  // MARK: Private
 
   @State private var isCompleted: Bool = false
 }

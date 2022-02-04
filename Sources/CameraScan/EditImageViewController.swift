@@ -23,6 +23,8 @@ public final class EditImageViewController: UIViewController {
     self.image = isRotateImage ? image.applyingPortraitOrientation() : image
     self.quad = quad ?? .defaultValueByOffset(image: image)
     erroAction = errorAction
+    let aa = image.applyZoomableViewOrientation()
+    zoomGestureController = .init(image: aa, quadView: quadView)
     super.init(nibName: .none, bundle: .none)
   }
 
@@ -44,6 +46,7 @@ public final class EditImageViewController: UIViewController {
 
   public override func viewDidLoad() {
     super.viewDidLoad()
+    view.backgroundColor = .red
     applyLayout()
     prepareUI()
   }
@@ -72,13 +75,13 @@ public final class EditImageViewController: UIViewController {
     view.translatesAutoresizingMaskIntoConstraints = false
     return view
   }()
-  private lazy var quadView: QuadrilateralView = {
+  private let quadView: QuadrilateralView = {
     let view = QuadrilateralView()
     view.editable = true
     view.translatesAutoresizingMaskIntoConstraints = false
     return view
   }()
-  private var zoomGestureController: ZoomGestureController!
+  private var zoomGestureController: ZoomGestureController
   private var quadViewWidthConstraint = NSLayoutConstraint()
   private var quadViewHeightContraint = NSLayoutConstraint()
   private let erroAction: (CameraScanError) -> Void
@@ -213,7 +216,6 @@ extension EditImageViewController {
   }
 
   private func prepareUI() {
-    zoomGestureController = .init(image: image, quadView: quadView)
     addLongGesture(controller: zoomGestureController)
   }
 
@@ -259,12 +261,29 @@ extension UIImage {
       return rotated(angle: .init(value: .pi, unit: .radians)) ?? self
     case .down:
       return rotated(angle: .init(value: .pi, unit: .radians), options: [
-        .flipOnHorizontalAxis, .flipOnHorizontalAxis,
+        .flipOnVerticalAxis, .flipOnHorizontalAxis,
       ]) ?? self
     case .left:
       return self
     case .right:
       return rotated(angle: .init(value: .pi / 2.0, unit: .radians)) ?? self
+    default:
+      return self
+    }
+  }
+
+  func applyZoomableViewOrientation() -> UIImage {
+    switch imageOrientation {
+    case .right:
+      return rotated(angle: .init(value: .pi / 2.0, unit: .radians)) ?? self
+    case .left:
+      return rotated(angle: .init(value: -(.pi / 2.0), unit: .radians)) ?? self
+    case .up:
+      return rotated(angle: .init(value: .pi, unit: .radians), options: [
+        .flipOnVerticalAxis, .flipOnHorizontalAxis,
+      ]) ?? self
+    case .down:
+      return rotated(angle: .init(value: .pi, unit: .radians)) ?? self
     default:
       return self
     }
