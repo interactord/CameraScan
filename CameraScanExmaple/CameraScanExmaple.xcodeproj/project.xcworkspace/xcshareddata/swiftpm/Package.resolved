@@ -3,10 +3,10 @@
     "pins": [
       {
         "package": "CameraScan",
-        "repositoryURL": "/Users/sangbongmoon/WorkSpace/CameraScan",
+        "repositoryURL": "https://github.com/interactord/CameraScan",
         "state": {
           "branch": "main",
-          "revision": "d00859977afc8eceef1a558c9bccb1a5a4f34d7b",
+          "revision": "825cbc1ff39d3268f070fffe9870c621e9089d8c",
           "version": null
         }
       }

@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		290CBA0427B0BC29005966F6 /* CameraScan in Frameworks */ = {isa = PBXBuildFile; productRef = 290CBA0327B0BC29005966F6 /* CameraScan */; };
 		2916B789279FA9B8006C4B88 /* CameraScanExmapleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2916B788279FA9B8006C4B88 /* CameraScanExmapleApp.swift */; };
 		2916B78B279FA9B8006C4B88 /* TakePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2916B78A279FA9B8006C4B88 /* TakePictureView.swift */; };
 		2916B78D279FA9B9006C4B88 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2916B78C279FA9B9006C4B88 /* Assets.xcassets */; };
 		2916B790279FA9B9006C4B88 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2916B78F279FA9B9006C4B88 /* Preview Assets.xcassets */; };
-		2916B7A1279FAC02006C4B88 /* CameraScan in Frameworks */ = {isa = PBXBuildFile; productRef = 2916B7A0279FAC02006C4B88 /* CameraScan */; };
 		291EE72A27ABE79D0023DB03 /* FlatImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291EE72927ABE79D0023DB03 /* FlatImageView.swift */; };
 		2943850827ACD2EF00C9DD3B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2943850727ACD2EF00C9DD3B /* HomeView.swift */; };
 		2943850A27ACE89300C9DD3B /* SelectPictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2943850927ACE89300C9DD3B /* SelectPictureView.swift */; };
@@ -37,7 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2916B7A1279FAC02006C4B88 /* CameraScan in Frameworks */,
+				290CBA0427B0BC29005966F6 /* CameraScan in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,7 +109,7 @@
 			);
 			name = CameraScanExmaple;
 			packageProductDependencies = (
-				2916B7A0279FAC02006C4B88 /* CameraScan */,
+				290CBA0327B0BC29005966F6 /* CameraScan */,
 			);
 			productName = CameraScanExmaple;
 			productReference = 2916B785279FA9B8006C4B88 /* CameraScanExmaple.app */;
@@ -140,7 +140,7 @@
 			);
 			mainGroup = 2916B77C279FA9B8006C4B88;
 			packageReferences = (
-				2916B79F279FAC02006C4B88 /* XCRemoteSwiftPackageReference "CameraScan" */,
+				290CBA0227B0BC29005966F6 /* XCRemoteSwiftPackageReference "CameraScan" */,
 			);
 			productRefGroup = 2916B786279FA9B8006C4B88 /* Products */;
 			projectDirPath = "";
@@ -383,9 +383,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		2916B79F279FAC02006C4B88 /* XCRemoteSwiftPackageReference "CameraScan" */ = {
+		290CBA0227B0BC29005966F6 /* XCRemoteSwiftPackageReference "CameraScan" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = /Users/sangbongmoon/WorkSpace/CameraScan;
+			repositoryURL = "https://github.com/interactord/CameraScan";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -394,9 +394,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2916B7A0279FAC02006C4B88 /* CameraScan */ = {
+		290CBA0327B0BC29005966F6 /* CameraScan */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 2916B79F279FAC02006C4B88 /* XCRemoteSwiftPackageReference "CameraScan" */;
+			package = 290CBA0227B0BC29005966F6 /* XCRemoteSwiftPackageReference "CameraScan" */;
 			productName = CameraScan;
 		};
 /* End XCSwiftPackageProductDependency section */
