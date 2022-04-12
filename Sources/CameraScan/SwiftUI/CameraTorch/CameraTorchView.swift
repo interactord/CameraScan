@@ -5,9 +5,9 @@ public struct CameraTorchView {
   let onImage: UIImage
   let offImage: UIImage
 
-  @StateObject private var intent: TorchIntent = .init()
+  @StateObject private var intent: CameraTorchIntent = .init()
 
-  private var state: TorchModel.State { intent.state }
+  private var state: CameraTorchModel.State { intent.state }
 
   public init(onImage: UIImage, offImage: UIImage) {
     self.onImage = onImage
