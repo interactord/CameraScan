@@ -19,6 +19,12 @@ struct TakePictureView: View {
           print($0.localizedDescription)
         })
 
+      CameraGridLineView(
+        horizontalSpacing: UIScreen.main.bounds.width / 4,
+        verticalSpacing: UIScreen.main.bounds.height / 8,
+        color: Color.white,
+        lineWidth: 1)
+
       VStack {
         Spacer()
 
