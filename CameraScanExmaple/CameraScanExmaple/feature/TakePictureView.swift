@@ -24,6 +24,12 @@ struct TakePictureView: View {
 
         VStack {
           HStack {
+            if
+              let onImage = UIImage(systemName: "bolt.fill"),
+              let offImage = UIImage(systemName: "bolt.slash.fill") {
+              CameraTorchView(onImage: onImage, offImage: offImage)
+            }
+
             Spacer()
             Button(action: { isCaptured.toggle() }) {
               Circle()
