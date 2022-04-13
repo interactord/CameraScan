@@ -27,23 +27,6 @@ struct TakePictureForEdgeDetectingView: View {
         VStack {
           HStack {
             Spacer()
-            Button(action: {
-              print("엘범 불러오기")
-            }, label: {
-              SelectPhotoButton(
-                intent: SelectPhotoButtonIntent(onPermissionErrorAction: {}),
-                placeholder: {
-                  Text("")
-                    .background(Color.red)
-                    .frame(width: 80, height: 80)
-                }) { image in
-                  Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 80, height: 80)
-                    .clipped()
-                }
-            })
 
             Spacer(minLength: 15)
             Button(action: { isCaptured.toggle() }) {

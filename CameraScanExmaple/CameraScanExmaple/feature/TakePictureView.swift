@@ -32,22 +32,14 @@ struct TakePictureView: View {
         VStack {
           HStack {
             Spacer()
-            Button(action: {
-              print("엘범 불러오기")
-            }, label: {
-              SelectPhotoButton(
-                intent: SelectPhotoButtonIntent(onPermissionErrorAction: {}),
-                placeholder: {
-                  Text("")
-                    .background(Color.red)
-                    .frame(width: 80, height: 80)
-                }) { image in
-                  Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 80, height: 80)
-                    .clipped()
-                }
+            SelectPhotoButton(onSelectedImageAction: { image in
+              print(image)
+            }, content: {
+              if let image = UIImage(systemName: "photo.artframe") {
+                Image(uiImage: image)
+              } else {
+                EmptyView()
+              }
             })
 
             Spacer(minLength: 15)
