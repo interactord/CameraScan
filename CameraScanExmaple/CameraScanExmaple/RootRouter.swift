@@ -29,6 +29,8 @@ final class RootRouter {
       navigation.pushViewController(makeFlatImage(image: image), animated: true)
     case .takeAPicture:
       navigation.pushViewController(makeTakePictureView(), animated: true)
+    case .takeAPictureForEdgeDetecting:
+      navigation.pushViewController(makeTakePictureForEdgeDetectingView(), animated: true)
     }
   }
 
@@ -86,12 +88,22 @@ final class RootRouter {
     return UIHostingController(rootView: AnyView(root))
   }
 
+
+  private func makeTakePictureForEdgeDetectingView() -> UIHostingController<AnyView> {
+    let root = TakePictureForEdgeDetectingView(router: self)
+    let viewName = String(describing: root)
+    let controller = UIHostingController(rootView: AnyView(root))
+    stack[viewName] = controller
+    return UIHostingController(rootView: AnyView(root))
+  }
+
 }
 
 extension RootRouter {
   enum RouteType {
     case back
     case takeAPicture
+    case takeAPictureForEdgeDetecting
     case selectAPicture
     case edit(image: UIImage, model: Quadrilateral?, isRotateImage: Bool)
     case flatImage(image: UIImage)

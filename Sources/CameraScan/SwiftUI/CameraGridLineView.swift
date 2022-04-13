@@ -1,43 +1,47 @@
 import Foundation
 import SwiftUI
 
+// MARK: - CameraGridLineView
+
 public struct CameraGridLineView {
 
-  let horizontalSpacing: CGFloat
-  let verticalSpacing: CGFloat
+  let horizontalLine: Int
+  let verticalLine: Int
   let color: Color
   let lineWidth: CGFloat
 
   public init(
-    horizontalSpacing: CGFloat,
-    verticalSpacing: CGFloat,
+    horizontalLine: Int,
+    verticalLine: Int,
     color: Color,
-    lineWidth: CGFloat
-  ) {
-    self.horizontalSpacing = horizontalSpacing
-    self.verticalSpacing = verticalSpacing
+    lineWidth: CGFloat)
+  {
+    self.horizontalLine = horizontalLine
+    self.verticalLine = verticalLine
     self.color = color
     self.lineWidth = lineWidth
   }
 
 }
 
+// MARK: View
+
 extension CameraGridLineView: View {
 
   public var body: some View {
     GeometryReader { reader in
       Path { path in
-        let numberOfHGridLines = Int(reader.size.height / verticalSpacing)
-        let numberOfVGridLines = Int(reader.size.width / horizontalSpacing)
+        let numberOfVGridLines = Int(reader.size.height) / verticalLine
+        let numberOfHGridLines = Int(reader.size.width) / horizontalLine
 
-        (0...numberOfVGridLines).enumerated().forEach { element in
-          let vOffset: CGFloat = CGFloat(element.offset) * horizontalSpacing
+        (1...horizontalLine).enumerated().forEach { element in
+          let vOffset: CGFloat = CGFloat(element.offset) * CGFloat(numberOfHGridLines)
           path.move(to: .init(x: vOffset, y: .zero))
           path.addLine(to: .init(x: vOffset, y: reader.size.height))
         }
 
-        (0...numberOfHGridLines).enumerated().forEach { element in
-          let hOffset: CGFloat = CGFloat(element.offset) * verticalSpacing
+        (1...verticalLine).enumerated().forEach { element in
+          let hOffset: CGFloat = CGFloat(element.offset) * CGFloat(numberOfVGridLines)
           path.move(to: .init(x: .zero, y: hOffset))
           path.addLine(to: .init(x: reader.size.width, y: hOffset))
         }

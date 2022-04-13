@@ -27,6 +27,9 @@ struct HomeView: View {
         .default(.init("Take a picture"), action: {
           router.navigatedTo(type: .takeAPicture)
         }),
+        .default(.init("Take a picture (Edige Detecting)"), action: {
+          router.navigatedTo(type: .takeAPictureForEdgeDetecting)
+        }),
         .default(.init("Select a picture"), action: {
           isShowSelectPictureView.toggle()
         }),

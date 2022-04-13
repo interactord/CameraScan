@@ -5,11 +5,15 @@ import SwiftUI
 
 struct FlatImageView: View {
 
-  @State private(set) var image: UIImage
+  // MARK: Lifecycle
 
   init(image: UIImage) {
     self.image = image
   }
+
+  // MARK: Internal
+
+  @State private(set) var image: UIImage
 
   var body: some View {
     ZStack {

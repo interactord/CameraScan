@@ -17,6 +17,7 @@
 		29AA53DF27A295620034C884 /* RootRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AA53DE27A295620034C884 /* RootRouter.swift */; };
 		29AA53FC27A2B5C50034C884 /* EditPictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AA53FB27A2B5C50034C884 /* EditPictureView.swift */; };
 		D247AFA828054D5B00C681B2 /* CameraScan in Frameworks */ = {isa = PBXBuildFile; productRef = D247AFA728054D5B00C681B2 /* CameraScan */; };
+		D2BE86C728065A6B00F78D24 /* TakePictureForEdgeDetectingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BE86C628065A6B00F78D24 /* TakePictureForEdgeDetectingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,8 @@
 		29AA53DE27A295620034C884 /* RootRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootRouter.swift; sourceTree = "<group>"; };
 		29AA53FB27A2B5C50034C884 /* EditPictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPictureView.swift; sourceTree = "<group>"; };
 		D247AFA528054D4E00C681B2 /* CameraScan */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CameraScan; path = ..; sourceTree = "<group>"; };
+		D2BE86C528058A8E00F78D24 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D2BE86C628065A6B00F78D24 /* TakePictureForEdgeDetectingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TakePictureForEdgeDetectingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +69,7 @@
 		2916B787279FA9B8006C4B88 /* CameraScanExmaple */ = {
 			isa = PBXGroup;
 			children = (
+				D2BE86C528058A8E00F78D24 /* Info.plist */,
 				29AA53FA27A2B5B00034C884 /* feature */,
 				2916B788279FA9B8006C4B88 /* CameraScanExmapleApp.swift */,
 				29AA53DE27A295620034C884 /* RootRouter.swift */,
@@ -91,6 +95,7 @@
 				29AA53FB27A2B5C50034C884 /* EditPictureView.swift */,
 				291EE72927ABE79D0023DB03 /* FlatImageView.swift */,
 				2943850927ACE89300C9DD3B /* SelectPictureView.swift */,
+				D2BE86C628065A6B00F78D24 /* TakePictureForEdgeDetectingView.swift */,
 			);
 			path = feature;
 			sourceTree = "<group>";
@@ -192,6 +197,7 @@
 				2943850827ACD2EF00C9DD3B /* HomeView.swift in Sources */,
 				29AA53DF27A295620034C884 /* RootRouter.swift in Sources */,
 				2916B789279FA9B8006C4B88 /* CameraScanExmapleApp.swift in Sources */,
+				D2BE86C728065A6B00F78D24 /* TakePictureForEdgeDetectingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,8 +331,10 @@
 				DEVELOPMENT_TEAM = 7836J6Z5N8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CameraScanExmaple/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Used to scan images.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Used to select images from your Photo Library.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Use to photo library";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -356,8 +364,10 @@
 				DEVELOPMENT_TEAM = 7836J6Z5N8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CameraScanExmaple/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Used to scan images.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Used to select images from your Photo Library.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Use to photo library";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

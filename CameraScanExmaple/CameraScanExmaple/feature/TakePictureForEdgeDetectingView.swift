@@ -1,9 +1,9 @@
 import CameraScan
 import SwiftUI
 
-// MARK: - TakePictureView
+// MARK: - TakePictureForEdgeDetectingView
 
-struct TakePictureView: View {
+struct TakePictureForEdgeDetectingView: View {
 
   // MARK: Internal
 
@@ -19,16 +19,11 @@ struct TakePictureView: View {
           print($0.localizedDescription)
         })
 
-      CameraGridLineView(
-        horizontalLine: 4,
-        verticalLine: 6,
-        color: .white,
-        lineWidth: 1)
-        .opacity(0.23)
-
+      CameraGridLineView(horizontalLine: 4, verticalLine: 6, color: .white, lineWidth: 1)
 
       VStack {
         Spacer()
+
         VStack {
           HStack {
             Spacer()
@@ -83,9 +78,9 @@ struct TakePictureView: View {
 
 }
 
-// MARK: - TakePictureView_Previews
+// MARK: - TakePictureForEdgeDetectingView_Previews
 
-struct TakePictureView_Previews: PreviewProvider {
+struct TakePictureForEdgeDetectingView_Previews: PreviewProvider {
   static var previews: some View {
     TakePictureView(router: RootRouter.shared)
   }

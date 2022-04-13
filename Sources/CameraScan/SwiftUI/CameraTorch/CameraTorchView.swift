@@ -1,6 +1,8 @@
 import Foundation
 import SwiftUI
 
+// MARK: - CameraTorchView
+
 public struct CameraTorchView {
   let onImage: UIImage
   let offImage: UIImage
@@ -14,6 +16,8 @@ public struct CameraTorchView {
     self.offImage = offImage
   }
 }
+
+// MARK: View
 
 extension CameraTorchView: View {
 
