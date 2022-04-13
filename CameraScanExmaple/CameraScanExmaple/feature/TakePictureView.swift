@@ -11,13 +11,9 @@ struct TakePictureView: View {
 
   var body: some View {
     ZStack {
-      CameraScanView(
-        captured: $isCaptured,
-        didCompletion: { image, model in
-          router.navigatedTo(type: .edit(image: image, model: model, isRotateImage: true))
-        }, didError: {
-          print($0.localizedDescription)
-        })
+      CameraFrameView(onTapCapture: $isCaptured) { image in
+        print(image)
+      }
 
       CameraGridLineView(
         horizontalLine: 4,
