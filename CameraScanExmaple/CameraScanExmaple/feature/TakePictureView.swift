@@ -54,7 +54,9 @@ struct TakePictureView: View {
               let onImage = UIImage(systemName: "bolt.fill"),
               let offImage = UIImage(systemName: "bolt.slash.fill")
             {
-              CameraTorchView(onImage: onImage, offImage: offImage)
+              CameraTorchView(
+                onContent: { Image(uiImage: onImage) },
+                offContent: { Image(uiImage: offImage) })
             }
 
             Spacer()

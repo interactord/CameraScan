@@ -3,17 +3,17 @@ import SwiftUI
 
 // MARK: - CameraTorchView
 
-public struct CameraTorchView {
-  let onImage: UIImage
-  let offImage: UIImage
+public struct CameraTorchView<OnContent: View, OffContent: View> {
+  let onContent: OnContent
+  let offContent: OffContent
 
   @StateObject private var intent: CameraTorchIntent = .init()
 
   private var state: CameraTorchModel.State { intent.state }
 
-  public init(onImage: UIImage, offImage: UIImage) {
-    self.onImage = onImage
-    self.offImage = offImage
+  public init(@ViewBuilder onContent: @escaping () -> OnContent, offContent: @escaping () -> OffContent) {
+    self.onContent = onContent()
+    self.offContent = offContent()
   }
 }
 
@@ -25,7 +25,8 @@ extension CameraTorchView: View {
     Button(action: {
       intent.send(action: .onChangedTorchState)
     }, label: {
-      Image(uiImage: state.isTorchOn ? onImage : offImage)
+      if state.isTorchOn { onContent }
+      else { offContent }
     })
     .onAppear { intent.send(action: .getCurrentTorchState) }
   }
