@@ -34,14 +34,14 @@ extension CameraGridLineView: View {
         let numberOfVGridLines = Int(reader.size.height) / verticalLine
         let numberOfHGridLines = Int(reader.size.width) / horizontalLine
 
-        (1...horizontalLine).enumerated().forEach { element in
-          let vOffset: CGFloat = CGFloat(element.offset) * CGFloat(numberOfHGridLines)
+        (1...(horizontalLine - 1)).forEach { element in
+          let vOffset: CGFloat = CGFloat(element) * CGFloat(numberOfHGridLines)
           path.move(to: .init(x: vOffset, y: .zero))
           path.addLine(to: .init(x: vOffset, y: reader.size.height))
         }
 
-        (1...verticalLine).enumerated().forEach { element in
-          let hOffset: CGFloat = CGFloat(element.offset) * CGFloat(numberOfVGridLines)
+        (1...(verticalLine - 1)).forEach { element in
+          let hOffset: CGFloat = CGFloat(element) * CGFloat(numberOfVGridLines)
           path.move(to: .init(x: .zero, y: hOffset))
           path.addLine(to: .init(x: reader.size.width, y: hOffset))
         }

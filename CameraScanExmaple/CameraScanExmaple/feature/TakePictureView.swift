@@ -14,6 +14,7 @@ struct TakePictureView: View {
       CameraFrameView(onTapCapture: $isCaptured) { image in
         print(image)
       }
+      .background(Color.black)
 
       CameraGridLineView(
         horizontalLine: 4,
