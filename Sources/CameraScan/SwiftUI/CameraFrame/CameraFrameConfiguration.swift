@@ -1,5 +1,7 @@
-import Foundation
 import AVFoundation
+import Foundation
+
+// MARK: - CameraFrameConfiguration
 
 struct CameraFrameConfiguration {
 
@@ -53,10 +55,11 @@ extension CameraFrameConfiguration {
 
   fileprivate func mutateInOutput() -> Self {
     guard
-      let currentCamera = self.currentCamera,
-      let input = try? AVCaptureDeviceInput(device: currentCamera) else {
-        return self
-      }
+      let currentCamera = currentCamera,
+      let input = try? AVCaptureDeviceInput(device: currentCamera) else
+    {
+      return self
+    }
 
     let captureSession = captureSession
     captureSession.sessionPreset = .photo

@@ -1,6 +1,8 @@
-import SwiftUI
-import Foundation
 import AVFoundation
+import Foundation
+import SwiftUI
+
+// MARK: - CameraFrameRepresentableView
 
 struct CameraFrameRepresentableView {
 
@@ -11,11 +13,14 @@ struct CameraFrameRepresentableView {
 
   init(
     onTapCapture: Binding<Bool>,
-    didCompletedAction: @escaping (UIImage) -> Void) {
-      _onTapCapture = onTapCapture
-      self.didCompletedAction = didCompletedAction
+    didCompletedAction: @escaping (UIImage) -> Void)
+  {
+    _onTapCapture = onTapCapture
+    self.didCompletedAction = didCompletedAction
   }
 }
+
+// MARK: UIViewControllerRepresentable
 
 extension CameraFrameRepresentableView: UIViewControllerRepresentable {
   func makeUIViewController(context: Context) -> CameraFrameViewController {
@@ -39,13 +44,18 @@ extension CameraFrameRepresentableView: UIViewControllerRepresentable {
 extension CameraFrameRepresentableView {
 
   final class Coordinator: NSObject, UINavigationControllerDelegate, AVCapturePhotoCaptureDelegate {
-    let parent: CameraFrameRepresentableView
-    let didCompletedAction: (UIImage) -> Void
+
+    // MARK: Lifecycle
 
     init(parent: CameraFrameRepresentableView, didCompletedAction: @escaping (UIImage) -> Void) {
       self.parent = parent
       self.didCompletedAction = didCompletedAction
     }
+
+    // MARK: Internal
+
+    let parent: CameraFrameRepresentableView
+    let didCompletedAction: (UIImage) -> Void
 
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
       parent.onTapCapture = false

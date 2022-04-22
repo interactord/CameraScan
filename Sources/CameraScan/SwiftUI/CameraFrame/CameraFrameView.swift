@@ -1,5 +1,7 @@
 import SwiftUI
 
+// MARK: - CameraFrameView
+
 public struct CameraFrameView {
 
   @Binding var onTapCapture: Bool
@@ -7,11 +9,14 @@ public struct CameraFrameView {
 
   public init(
     onTapCapture: Binding<Bool>,
-    didTapCaptureAction: @escaping (UIImage) -> Void) {
-      _onTapCapture = onTapCapture
-      self.didTapCaptureAction = didTapCaptureAction
-    }
+    didTapCaptureAction: @escaping (UIImage) -> Void)
+  {
+    _onTapCapture = onTapCapture
+    self.didTapCaptureAction = didTapCaptureAction
+  }
 }
+
+// MARK: View
 
 extension CameraFrameView: View {
 

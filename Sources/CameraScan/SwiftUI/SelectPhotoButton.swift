@@ -11,8 +11,8 @@ public struct SelectPhotoButton<Content: View> {
 
   public init(
     onSelectedImageAction: @escaping (UIImage) -> Void,
-    @ViewBuilder content: () -> Content
-  ) {
+    @ViewBuilder content: () -> Content)
+  {
     self.onSelectedImageAction = onSelectedImageAction
     self.content = content()
   }
@@ -28,10 +28,10 @@ extension SelectPhotoButton: View {
     }, label: {
       content
     })
-      .fullScreenCover(
-        isPresented: $isShowImagePicker,
-        content: {
-          ImagePicker(onSelectedImageAction: onSelectedImageAction)
-        })
+    .fullScreenCover(
+      isPresented: $isShowImagePicker,
+      content: {
+        ImagePicker(onSelectedImageAction: onSelectedImageAction)
+      })
   }
 }

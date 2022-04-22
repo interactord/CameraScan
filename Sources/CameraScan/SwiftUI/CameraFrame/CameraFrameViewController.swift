@@ -1,7 +1,9 @@
-import UIKit
 import AVFoundation
+import UIKit
 
 final class CameraFrameViewController: UIViewController {
+
+  // MARK: Internal
 
   var image: UIImage?
   let session: AVCaptureSession = .init()
@@ -14,6 +16,15 @@ final class CameraFrameViewController: UIViewController {
     excuteRunningSession()
   }
 
+  func onTapRecord() {
+    guard let proxyDelegate = proxyDelegate else { return }
+    configuration.photoOutput?.capturePhoto(
+      with: .init(),
+      delegate: proxyDelegate)
+  }
+
+  // MARK: Fileprivate
+
   fileprivate func applyVideoLayer() {
     if let layer = configuration.previewLayer {
       layer.frame = view.frame
@@ -25,12 +36,6 @@ final class CameraFrameViewController: UIViewController {
     configuration.captureSession.startRunning()
   }
 
-  func onTapRecord() {
-    guard let proxyDelegate = proxyDelegate else { return }
-    configuration.photoOutput?.capturePhoto(
-      with: .init(),
-      delegate: proxyDelegate)
-  }
 }
 
 
