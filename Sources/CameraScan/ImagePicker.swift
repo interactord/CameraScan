@@ -5,12 +5,16 @@ import UIKit
 // MARK: - ImagePicker
 
 public struct ImagePicker {
-  @Environment(\.presentationMode) var presentationMode
 
   private let onSelectedImageAction: (UIImage) -> Void
+  private let onDismissalAction: () -> Void
 
-  public init(onSelectedImageAction: @escaping (UIImage) -> Void) {
+  public init(
+    onSelectedImageAction: @escaping (UIImage) -> Void,
+    onDismissalAction: @escaping () -> Void = {})
+  {
     self.onSelectedImageAction = onSelectedImageAction
+    self.onDismissalAction = onDismissalAction
   }
 
 }
@@ -34,8 +38,7 @@ extension ImagePicker: UIViewControllerRepresentable {
 
   public func makeCoordinator() -> Coordinator {
     Coordinator(
-      parent: self,
-      onSelectedImageAction: onSelectedImageAction)
+      onSelectedImageAction: onSelectedImageAction, onDismissalAction: onDismissalAction)
   }
 }
 
@@ -45,27 +48,29 @@ extension ImagePicker {
 
     // MARK: Lifecycle
 
-    init(parent: ImagePicker, onSelectedImageAction: @escaping (UIImage) -> Void) {
-      self.parent = parent
+    init(onSelectedImageAction: @escaping (UIImage) -> Void, onDismissalAction: @escaping () -> Void) {
       self.onSelectedImageAction = onSelectedImageAction
+      self.onDismissalAction = onDismissalAction
     }
 
-    // MARK: Internal
-
-    var parent: ImagePicker
-    let onSelectedImageAction: (UIImage) -> Void
+    // MARK: Public
 
     public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-      parent.presentationMode.wrappedValue.dismiss()
+      onDismissalAction()
     }
 
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
       if let image = info[.originalImage] as? UIImage {
         onSelectedImageAction(image)
       }
-
-      parent.presentationMode.wrappedValue.dismiss()
+      onDismissalAction()
     }
+
+    // MARK: Private
+
+    private let onSelectedImageAction: (UIImage) -> Void
+    private let onDismissalAction: () -> Void
+
   }
 }
 

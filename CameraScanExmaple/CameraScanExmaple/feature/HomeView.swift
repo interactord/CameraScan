@@ -37,11 +37,14 @@ struct HomeView: View {
       ])
     }
     .sheet(isPresented: $isShowSelectPictureView) {
-      SelectPictureView { image in
-        ImageDetactionFunctor().detact(image: image) { model in
-          router.navigatedTo(type: .edit(image: image, model: model, isRotateImage: false))
-        }
-      }
+      SelectPictureView(
+        didSelectAction: { image in
+          ImageDetactionFunctor().detact(image: image) { model in
+            router.navigatedTo(type: .edit(image: image, model: model, isRotateImage: false))
+          }
+        }, onDismissalAction: {
+          isShowSelectPictureView = false
+        })
     }
   }
 

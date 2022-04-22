@@ -11,10 +11,10 @@ struct TakePictureView: View {
 
   var body: some View {
     ZStack {
-      CameraFrameView(onTapCapture: $isCaptured) { image in
-        print(image)
-      }
-      .background(Color.black)
+      CameraFrameView(
+        onTapCapture: $isCaptured,
+        didTapCaptureAction: { print($0) })
+        .background(Color.black)
 
       CameraGridLineView(
         horizontalLine: 4,

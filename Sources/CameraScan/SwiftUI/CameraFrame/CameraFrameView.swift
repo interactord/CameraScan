@@ -4,15 +4,18 @@ import SwiftUI
 
 public struct CameraFrameView {
 
-  @Binding var onTapCapture: Bool
-  let didTapCaptureAction: (UIImage) -> Void
+  @Binding private var onTapCapture: Bool
+  private let didTapCaptureAction: (UIImage) -> Void
+  private let onDismissalAction: () -> Void
 
   public init(
     onTapCapture: Binding<Bool>,
-    didTapCaptureAction: @escaping (UIImage) -> Void)
+    didTapCaptureAction: @escaping (UIImage) -> Void,
+    onDismissalAction: @escaping () -> Void = {})
   {
     _onTapCapture = onTapCapture
     self.didTapCaptureAction = didTapCaptureAction
+    self.onDismissalAction = onDismissalAction
   }
 }
 
@@ -23,7 +26,8 @@ extension CameraFrameView: View {
   public var body: some View {
     CameraFrameRepresentableView(
       onTapCapture: $onTapCapture,
-      didCompletedAction: didTapCaptureAction)
+      didCompletedAction: didTapCaptureAction,
+      onDismissalAction: onDismissalAction)
   }
 
 }

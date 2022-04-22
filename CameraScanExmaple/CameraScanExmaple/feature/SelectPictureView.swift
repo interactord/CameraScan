@@ -5,11 +5,17 @@ import UIKit
 
 struct SelectPictureView: UIViewControllerRepresentable {
 
-  let didSelectAction: (UIImage) -> Void
-  @Environment(\.presentationMode) private var presentationMode
+  // MARK: Lifecycle
+
+  init(didSelectAction: @escaping (UIImage) -> Void, onDismissalAction: @escaping () -> Void = {}) {
+    self.didSelectAction = didSelectAction
+    self.onDismissalAction = onDismissalAction
+  }
+
+  // MARK: Internal
 
   func makeCoordinator() -> Coordinator {
-    .init(self)
+    .init(didSelectAction: didSelectAction, onDismissalAction: onDismissalAction)
   }
 
   func makeUIViewController(context: Context) -> UIImagePickerController {
@@ -23,6 +29,11 @@ struct SelectPictureView: UIViewControllerRepresentable {
   func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
   }
 
+  // MARK: Private
+
+  private let didSelectAction: (UIImage) -> Void
+  private let onDismissalAction: () -> Void
+
 }
 
 extension SelectPictureView {
@@ -31,24 +42,29 @@ extension SelectPictureView {
 
     // MARK: Lifecycle
 
-    init(_ parent: SelectPictureView) {
-      self.parent = parent
+    init(didSelectAction: @escaping (UIImage) -> Void, onDismissalAction: @escaping () -> Void) {
+      self.didSelectAction = didSelectAction
+      self.onDismissalAction = onDismissalAction
     }
 
     // MARK: Internal
 
-    var parent: SelectPictureView
-
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-      parent.presentationMode.wrappedValue.dismiss()
+      onDismissalAction()
     }
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
       if let image = info[.originalImage] as? UIImage {
-        parent.didSelectAction(image)
+        didSelectAction(image)
       }
 
-      parent.presentationMode.wrappedValue.dismiss()
+      onDismissalAction()
     }
+
+    // MARK: Private
+
+    private let didSelectAction: (UIImage) -> Void
+    private let onDismissalAction: () -> Void
+
   }
 }

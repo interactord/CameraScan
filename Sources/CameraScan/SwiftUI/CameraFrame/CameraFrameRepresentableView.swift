@@ -6,17 +6,19 @@ import SwiftUI
 
 struct CameraFrameRepresentableView {
 
-  @Environment(\.presentationMode) var presentationMode
+  private let didCompletedAction: (UIImage) -> Void
+  private let onDismissalAction: () -> Void
 
-  let didCompletedAction: (UIImage) -> Void
   @Binding var onTapCapture: Bool
 
   init(
     onTapCapture: Binding<Bool>,
-    didCompletedAction: @escaping (UIImage) -> Void)
+    didCompletedAction: @escaping (UIImage) -> Void,
+    onDismissalAction: @escaping () -> Void)
   {
     _onTapCapture = onTapCapture
     self.didCompletedAction = didCompletedAction
+    self.onDismissalAction = onDismissalAction
   }
 }
 
@@ -30,7 +32,7 @@ extension CameraFrameRepresentableView: UIViewControllerRepresentable {
   }
 
   func makeCoordinator() -> Coordinator {
-    .init(parent: self, didCompletedAction: didCompletedAction)
+    .init(parent: self, didCompletedAction: didCompletedAction, onDismissalAction: onDismissalAction)
   }
 
   func updateUIViewController(_ uiViewController: CameraFrameViewController, context: Context) {
@@ -47,15 +49,15 @@ extension CameraFrameRepresentableView {
 
     // MARK: Lifecycle
 
-    init(parent: CameraFrameRepresentableView, didCompletedAction: @escaping (UIImage) -> Void) {
+    init(parent: CameraFrameRepresentableView, didCompletedAction: @escaping (UIImage) -> Void, onDismissalAction: @escaping () -> Void) {
       self.parent = parent
       self.didCompletedAction = didCompletedAction
+      self.onDismissalAction = onDismissalAction
     }
 
     // MARK: Internal
 
     let parent: CameraFrameRepresentableView
-    let didCompletedAction: (UIImage) -> Void
 
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
       parent.onTapCapture = false
@@ -63,8 +65,14 @@ extension CameraFrameRepresentableView {
       if let imageData = photo.fileDataRepresentation(), let image = UIImage(data: imageData) {
         didCompletedAction(image)
       }
-      parent.presentationMode.wrappedValue.dismiss()
+      onDismissalAction()
     }
+
+    // MARK: Private
+
+    private let didCompletedAction: (UIImage) -> Void
+    private let onDismissalAction: () -> Void
+
   }
 
 }

@@ -31,7 +31,9 @@ extension SelectPhotoButton: View {
     .fullScreenCover(
       isPresented: $isShowImagePicker,
       content: {
-        ImagePicker(onSelectedImageAction: onSelectedImageAction)
+        ImagePicker(
+          onSelectedImageAction: onSelectedImageAction,
+          onDismissalAction: { isShowImagePicker = false })
       })
   }
 }
