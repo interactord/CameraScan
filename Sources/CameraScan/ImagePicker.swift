@@ -1,22 +1,26 @@
 import Foundation
-import UIKit
 import SwiftUI
+import UIKit
 
-struct ImagePicker {
+// MARK: - ImagePicker
+
+public struct ImagePicker {
   @Environment(\.presentationMode) var presentationMode
 
-  let onSelectedImageAction: (UIImage) -> Void
+  private let onSelectedImageAction: (UIImage) -> Void
 
-  init(onSelectedImageAction: @escaping (UIImage) -> Void) {
+  public init(onSelectedImageAction: @escaping (UIImage) -> Void) {
     self.onSelectedImageAction = onSelectedImageAction
   }
 
 }
 
 
+// MARK: UIViewControllerRepresentable
+
 extension ImagePicker: UIViewControllerRepresentable {
 
-  func makeUIViewController(context: Context) -> some UIViewController {
+  public func makeUIViewController(context: Context) -> some UIViewController {
     let controller = UIImagePickerController()
     controller.allowsEditing = false
     controller.sourceType = .photoLibrary
@@ -25,10 +29,10 @@ extension ImagePicker: UIViewControllerRepresentable {
     return controller
   }
 
-  func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+  public func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
   }
 
-  func makeCoordinator() -> Coordinator {
+  public func makeCoordinator() -> Coordinator {
     Coordinator(
       parent: self,
       onSelectedImageAction: onSelectedImageAction)
@@ -37,20 +41,25 @@ extension ImagePicker: UIViewControllerRepresentable {
 
 extension ImagePicker {
 
-  final class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    var parent: ImagePicker
-    let onSelectedImageAction: (UIImage) -> Void
+  public final class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
+    // MARK: Lifecycle
 
     init(parent: ImagePicker, onSelectedImageAction: @escaping (UIImage) -> Void) {
       self.parent = parent
       self.onSelectedImageAction = onSelectedImageAction
     }
 
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+    // MARK: Internal
+
+    var parent: ImagePicker
+    let onSelectedImageAction: (UIImage) -> Void
+
+    public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
       parent.presentationMode.wrappedValue.dismiss()
     }
 
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
       if let image = info[.originalImage] as? UIImage {
         onSelectedImageAction(image)
       }
