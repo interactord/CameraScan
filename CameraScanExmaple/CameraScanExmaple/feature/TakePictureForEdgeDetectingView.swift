@@ -12,7 +12,7 @@ struct TakePictureForEdgeDetectingView: View {
   var body: some View {
     ZStack {
       CameraScanView(
-        captured: $isCaptured,
+        onTapCapture: $isCaptured,
         didCompletion: { image, model in
           router.navigatedTo(type: .edit(image: image, model: model, isRotateImage: true))
         }, didError: {

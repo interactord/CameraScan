@@ -5,12 +5,12 @@ import UIKit
 
 public struct CameraScanView {
   public init(
-    captured: Binding<Bool>,
+    onTapCapture: Binding<Bool>,
     scanBoxingLayer: DesignConfig.BoxLayer = .defaultValue(),
     didCompletion: @escaping (UIImage, Quadrilateral?) -> Void,
     didError: @escaping (CameraScanError) -> Void)
   {
-    self.captured = captured
+    self.onTapCapture = onTapCapture
     self.scanBoxingLayer = scanBoxingLayer
     self.didCompletion = didCompletion
     self.didError = didError
@@ -18,7 +18,7 @@ public struct CameraScanView {
 
   private let didCompletion: (UIImage, Quadrilateral?) -> Void
   private let didError: (CameraScanError) -> Void
-  private let captured: Binding<Bool>
+  private let onTapCapture: Binding<Bool>
   private let scanBoxingLayer: DesignConfig.BoxLayer
 }
 
@@ -37,7 +37,7 @@ extension CameraScanView: UIViewControllerRepresentable {
   }
 
   public func updateUIViewController(_ uiViewController: CameraScanViewController, context: Context) {
-    uiViewController.isCaptured = captured.wrappedValue
+    uiViewController.isCaptured = onTapCapture.wrappedValue
   }
 
 }
