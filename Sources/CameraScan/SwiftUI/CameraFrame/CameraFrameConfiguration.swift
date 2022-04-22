@@ -46,7 +46,7 @@ struct CameraFrameConfiguration {
 extension CameraFrameConfiguration {
   fileprivate func mutateDevice() -> Self {
     mutate(currentCamera: AVCaptureDevice.DiscoverySession(
-      deviceTypes: [.builtInDualWideCamera],
+      deviceTypes: [.builtInWideAngleCamera, .builtInDualCamera],
       mediaType: .video,
       position: .unspecified)
       .devices

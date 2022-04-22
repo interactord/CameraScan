@@ -13,7 +13,9 @@ struct CameraTorchWorker {
 
         do {
           try device.lockForConfiguration(); defer { device.unlockForConfiguration() }
-          device.torchMode = isOn ? .off : .on
+          let torchOn = !device.isTorchActive
+          try device.setTorchModeOn(level: 1.0)
+          device.torchMode = torchOn ? .on : .off
 
           promise(.success(!isOn))
         } catch {
@@ -32,12 +34,7 @@ struct CameraTorchWorker {
           device.hasTorch
         else { return promise(.success(false)) }
 
-        do {
-          try device.lockForConfiguration(); defer { device.unlockForConfiguration() }
-          return promise(.success(device.isTorchActive))
-        } catch {
-          return promise(.success(false))
-        }
+        return promise(.success(device.isTorchActive))
       }
       .eraseToAnyPublisher()
     }
