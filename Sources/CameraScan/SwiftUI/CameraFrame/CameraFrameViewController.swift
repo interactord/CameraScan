@@ -33,7 +33,10 @@ final class CameraFrameViewController: UIViewController {
   }
 
   fileprivate func excuteRunningSession() {
+    #if targetEnvironment(simulator)
+    #else
     configuration.captureSession.startRunning()
+    #endif
   }
 
 }
