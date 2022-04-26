@@ -8,8 +8,9 @@ public final class CameraScanViewController: UIViewController {
 
   // MARK: Lifecycle
 
-  public init(scanBoxingLayer: DesignConfig.BoxLayer) {
+  public init(scanBoxingLayer: DesignConfig.BoxLayer, onCaptureCompletion: @escaping () -> Void) {
     self.scanBoxingLayer = scanBoxingLayer
+    self.onCaptureCompletion = onCaptureCompletion
     super.init(nibName: .none, bundle: .none)
   }
 
@@ -20,6 +21,7 @@ public final class CameraScanViewController: UIViewController {
   // MARK: Public
 
   public let scanBoxingLayer: DesignConfig.BoxLayer
+  public let onCaptureCompletion: () -> Void
 
   public override func viewDidLoad() {
     super.viewDidLoad()
@@ -48,6 +50,7 @@ public final class CameraScanViewController: UIViewController {
     didSet {
       guard isCaptured else { return }
       cameraView.capture()
+      onCaptureCompletion()
     }
   }
 

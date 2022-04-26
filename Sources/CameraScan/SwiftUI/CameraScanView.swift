@@ -27,11 +27,13 @@ public struct CameraScanView {
 extension CameraScanView: UIViewControllerRepresentable {
 
   public func makeCoordinator() -> Coordinator {
-    Coordinator(didCompletion: didCompletion, didError: didError)
+    Coordinator(isCapture: onTapCapture, didCompletion: didCompletion, didError: didError)
   }
 
   public func makeUIViewController(context: Context) -> CameraScanViewController {
-    let controller = CameraScanViewController(scanBoxingLayer: scanBoxingLayer)
+    let controller = CameraScanViewController(scanBoxingLayer: scanBoxingLayer, onCaptureCompletion: {
+      onTapCapture.wrappedValue = false
+    })
     controller.cameraDelegate = context.coordinator
     return controller
   }
@@ -48,9 +50,11 @@ extension CameraScanView {
     // MARK: Lifecycle
 
     public init(
+      isCapture: Binding<Bool>,
       didCompletion: @escaping (UIImage, Quadrilateral?) -> Void,
       didError: @escaping (CameraScanError) -> Void)
     {
+      self.isCapture = isCapture
       self.didCompletion = didCompletion
       self.didError = didError
     }
@@ -58,6 +62,8 @@ extension CameraScanView {
     // MARK: Public
 
     public func captureImage(result: Result<(UIImage, Quadrilateral?), CameraScanError>) {
+      isCapture.wrappedValue = false
+
       switch result {
       case let .success((image, quad)):
         didCompletion(image, quad)
@@ -70,6 +76,7 @@ extension CameraScanView {
 
     let didCompletion: (UIImage, Quadrilateral?) -> Void
     let didError: (CameraScanError) -> Void
+    let isCapture: Binding<Bool>
 
   }
 }
