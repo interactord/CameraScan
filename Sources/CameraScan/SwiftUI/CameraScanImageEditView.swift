@@ -11,7 +11,8 @@ public struct CameraScanImageEditView {
     completed: Binding<Bool>,
     image: UIImage,
     quad: Quadrilateral?,
-    strokeColor: UIColor? = .none,
+    scanBoxingLayer: DesignConfig.BoxLayer = .defaultValue(),
+    scanEditLayer: DesignConfig.EditPointLayer = .defaultValue(),
     isRotateImage: Bool,
     didCroppedImage: @escaping (UIImage) -> Void,
     errorAction: @escaping (CameraScanError) -> Void)
@@ -19,7 +20,8 @@ public struct CameraScanImageEditView {
     self.completed = completed
     self.image = image
     self.quad = quad
-    self.strokeColor = strokeColor
+    self.scanBoxingLayer = scanBoxingLayer
+    self.scanEditLayer = scanEditLayer
     self.isRotateImage = isRotateImage
     self.didCroppedImage = didCroppedImage
     self.errorAction = errorAction
@@ -30,7 +32,8 @@ public struct CameraScanImageEditView {
   private let completed: Binding<Bool>
   private let image: UIImage
   private let quad: Quadrilateral?
-  private let strokeColor: UIColor?
+  private let scanBoxingLayer: DesignConfig.BoxLayer
+  private let scanEditLayer: DesignConfig.EditPointLayer
   private let isRotateImage: Bool
   private let didCroppedImage: (UIImage) -> Void
   private let errorAction: (CameraScanError) -> Void
@@ -45,6 +48,8 @@ extension CameraScanImageEditView: UIViewControllerRepresentable {
     let controller = EditImageViewController(
       image: image,
       quad: quad,
+      scanBoxingLayer: scanBoxingLayer,
+      scanEditLayer: scanEditLayer,
       isRotateImage: isRotateImage,
       errorAction: errorAction)
     controller.delegate = context.coordinator

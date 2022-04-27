@@ -18,6 +18,8 @@ struct EditPictureView: View {
         completed: $isCompleted,
         image: image,
         quad: quad,
+        scanBoxingLayer: .defaultValue(),
+        scanEditLayer: .defaultValue(),
         isRotateImage: isRotateImage,
         didCroppedImage: { router.navigatedTo(type: .flatImage(image: $0)) },
         errorAction: { error in

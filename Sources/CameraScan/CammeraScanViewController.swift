@@ -8,8 +8,9 @@ public final class CameraScanViewController: UIViewController {
 
   // MARK: Lifecycle
 
-  public init(scanBoxingLayer: DesignConfig.BoxLayer, onCaptureCompletion: @escaping () -> Void) {
+  public init(scanBoxingLayer: DesignConfig.BoxLayer, scanEditLayer: DesignConfig.EditPointLayer, onCaptureCompletion: @escaping () -> Void) {
     self.scanBoxingLayer = scanBoxingLayer
+    self.scanEditLayer = scanEditLayer
     self.onCaptureCompletion = onCaptureCompletion
     super.init(nibName: .none, bundle: .none)
   }
@@ -21,6 +22,7 @@ public final class CameraScanViewController: UIViewController {
   // MARK: Public
 
   public let scanBoxingLayer: DesignConfig.BoxLayer
+  public let scanEditLayer: DesignConfig.EditPointLayer
   public let onCaptureCompletion: () -> Void
 
   public override func viewDidLoad() {
@@ -63,7 +65,7 @@ public final class CameraScanViewController: UIViewController {
   // MARK: Private
 
   private lazy var cameraView: ScanCameraView = {
-    let view = ScanCameraView(scanBoxingLayer: scanBoxingLayer)
+    let view = ScanCameraView(scanBoxingLayer: scanBoxingLayer, scanEditLayer: scanEditLayer)
     view.translatesAutoresizingMaskIntoConstraints = false
     return view
   }()

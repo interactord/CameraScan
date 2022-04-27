@@ -17,14 +17,18 @@ public final class EditImageViewController: UIViewController {
   public init(
     image: UIImage,
     quad: Quadrilateral?,
+    scanBoxingLayer: DesignConfig.BoxLayer = .defaultValue(),
+    scanEditLayer: DesignConfig.EditPointLayer = .defaultValue(),
     isRotateImage: Bool,
     errorAction: @escaping (CameraScanError) -> Void)
   {
     self.image = isRotateImage ? image.applyingPortraitOrientation() : image
     self.quad = quad ?? .defaultValueByOffset(image: image)
     erroAction = errorAction
-    let aa = image.applyZoomableViewOrientation()
-    zoomGestureController = .init(image: aa, quadView: quadView)
+    let applyImage = image.applyZoomableViewOrientation()
+    let quadView = QuadrilateralView.makeView(scanBoxingLayer: scanBoxingLayer, scanEditLayer: scanEditLayer)
+    zoomGestureController = .init(image: applyImage, quadView: quadView)
+    self.quadView = quadView
     super.init(nibName: .none, bundle: .none)
   }
 
@@ -75,12 +79,7 @@ public final class EditImageViewController: UIViewController {
     view.translatesAutoresizingMaskIntoConstraints = false
     return view
   }()
-  private let quadView: QuadrilateralView = {
-    let view = QuadrilateralView()
-    view.editable = true
-    view.translatesAutoresizingMaskIntoConstraints = false
-    return view
-  }()
+  private let quadView: QuadrilateralView
   private var zoomGestureController: ZoomGestureController
   private var quadViewWidthConstraint = NSLayoutConstraint()
   private var quadViewHeightContraint = NSLayoutConstraint()
@@ -383,4 +382,15 @@ extension Bundle {
 
   private class ClassBundle {}
 
+}
+
+extension QuadrilateralView {
+  static func makeView(
+    scanBoxingLayer: DesignConfig.BoxLayer = .defaultValue(),
+    scanEditLayer: DesignConfig.EditPointLayer = .defaultValue()) -> QuadrilateralView {
+      let view = QuadrilateralView(scanBoxingLayer: scanBoxingLayer, scanEditLayer: scanEditLayer)
+      view.editable = true
+      view.translatesAutoresizingMaskIntoConstraints = false
+      return view
+  }
 }

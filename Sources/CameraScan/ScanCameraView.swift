@@ -14,8 +14,9 @@ public final class ScanCameraView: UIView {
 
   // MARK: Lifecycle
 
-  init(scanBoxingLayer: DesignConfig.BoxLayer) {
+  init(scanBoxingLayer: DesignConfig.BoxLayer, scanEditLayer: DesignConfig.EditPointLayer) {
     self.scanBoxingLayer = scanBoxingLayer
+    self.scanEditLayer = scanEditLayer
     super.init(frame: .zero)
   }
 
@@ -26,6 +27,7 @@ public final class ScanCameraView: UIView {
   // MARK: Public
 
   public let scanBoxingLayer: DesignConfig.BoxLayer
+  public let scanEditLayer: DesignConfig.EditPointLayer
 
   public weak var delegate: CameraScanViewOutputDelegate?
 
@@ -63,7 +65,7 @@ public final class ScanCameraView: UIView {
   private var captureSessionManager: CaptureSessionManager?
   private let videoPreviewLayer = AVCaptureVideoPreviewLayer()
   private lazy var quadView: QuadrilateralView = {
-    let view = QuadrilateralView(scanBoxingLayer: scanBoxingLayer)
+    let view = QuadrilateralView(scanBoxingLayer: scanBoxingLayer, scanEditLayer: scanEditLayer)
     view.editable = false
     view.translatesAutoresizingMaskIntoConstraints = false
     return view

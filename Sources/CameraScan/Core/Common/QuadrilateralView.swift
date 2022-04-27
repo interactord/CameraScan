@@ -31,7 +31,7 @@ final class QuadrilateralView: UIView {
       cornerViews.forEach { $0.isHidden = !editable }
 
       quadLayer.fillColor = scanBoxingLayer.apply(isEditing: editable).fillColor.cgColor
-      quadLayer.strokeColor = scanEditLayer.apply(isEditing: editable).style.strokeColor.cgColor
+      quadLayer.strokeColor = scanBoxingLayer.apply(isEditing: editable).strokeColor.cgColor
       quadLayer.lineWidth = scanEditLayer.apply(isEditing: editable).style.strokeWidth
 
       guard let quad = quad else { return }

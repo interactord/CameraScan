@@ -7,11 +7,13 @@ public struct CameraScanView {
   public init(
     onTapCapture: Binding<Bool>,
     scanBoxingLayer: DesignConfig.BoxLayer = .defaultValue(),
+    scanEditLayer: DesignConfig.EditPointLayer = .defaultValue(),
     didCompletion: @escaping (UIImage, Quadrilateral?) -> Void,
     didError: @escaping (CameraScanError) -> Void)
   {
     self.onTapCapture = onTapCapture
     self.scanBoxingLayer = scanBoxingLayer
+    self.scanEditLayer = scanEditLayer
     self.didCompletion = didCompletion
     self.didError = didError
   }
@@ -20,6 +22,7 @@ public struct CameraScanView {
   private let didError: (CameraScanError) -> Void
   private let onTapCapture: Binding<Bool>
   private let scanBoxingLayer: DesignConfig.BoxLayer
+  private let scanEditLayer: DesignConfig.EditPointLayer
 }
 
 // MARK: UIViewControllerRepresentable
@@ -31,7 +34,10 @@ extension CameraScanView: UIViewControllerRepresentable {
   }
 
   public func makeUIViewController(context: Context) -> CameraScanViewController {
-    let controller = CameraScanViewController(scanBoxingLayer: scanBoxingLayer, onCaptureCompletion: {
+    let controller = CameraScanViewController(
+      scanBoxingLayer: scanBoxingLayer,
+      scanEditLayer: scanEditLayer,
+      onCaptureCompletion: {
       onTapCapture.wrappedValue = false
     })
     controller.cameraDelegate = context.coordinator
