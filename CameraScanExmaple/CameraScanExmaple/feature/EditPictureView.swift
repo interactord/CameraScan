@@ -21,7 +21,9 @@ struct EditPictureView: View {
         scanBoxingLayer: .defaultValue(),
         scanEditLayer: .defaultValue(),
         isRotateImage: isRotateImage,
-        didCroppedImage: { router.navigatedTo(type: .flatImage(image: $0)) },
+        didCropAction: { quad, image in
+          router.navigatedTo(type: .flatImage(image: image))
+        },
         errorAction: { error in
           print(error.errorDescription ?? "")
         })

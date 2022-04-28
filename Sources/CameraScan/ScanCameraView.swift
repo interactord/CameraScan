@@ -85,7 +85,7 @@ extension ScanCameraView {
   // MARK: Private
 
   private func prepareUI() {
-    backgroundColor = .darkGray
+    backgroundColor = .clear
     captureSessionManager = .init(videoPreviewLayer: videoPreviewLayer)
     captureSessionManager?.delegate = self
   }

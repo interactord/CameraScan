@@ -14,7 +14,7 @@ public struct CameraScanImageEditView {
     scanBoxingLayer: DesignConfig.BoxLayer = .defaultValue(),
     scanEditLayer: DesignConfig.EditPointLayer = .defaultValue(),
     isRotateImage: Bool,
-    didCroppedImage: @escaping (UIImage) -> Void,
+    didCropAction: @escaping (Quadrilateral?, UIImage) -> Void,
     errorAction: @escaping (CameraScanError) -> Void)
   {
     self.completed = completed
@@ -23,7 +23,7 @@ public struct CameraScanImageEditView {
     self.scanBoxingLayer = scanBoxingLayer
     self.scanEditLayer = scanEditLayer
     self.isRotateImage = isRotateImage
-    self.didCroppedImage = didCroppedImage
+    self.didCropAction = didCropAction
     self.errorAction = errorAction
   }
 
@@ -35,7 +35,7 @@ public struct CameraScanImageEditView {
   private let scanBoxingLayer: DesignConfig.BoxLayer
   private let scanEditLayer: DesignConfig.EditPointLayer
   private let isRotateImage: Bool
-  private let didCroppedImage: (UIImage) -> Void
+  private let didCropAction: (Quadrilateral?, UIImage) -> Void
   private let errorAction: (CameraScanError) -> Void
 
 }
@@ -61,7 +61,7 @@ extension CameraScanImageEditView: UIViewControllerRepresentable {
   }
 
   public func makeCoordinator() -> Coordinator {
-    .init(didCroppedImage: didCroppedImage)
+    .init(didCropAction: didCropAction)
   }
 }
 
@@ -70,19 +70,19 @@ extension CameraScanImageEditView {
 
     // MARK: Lifecycle
 
-    init(didCroppedImage: @escaping (UIImage) -> Void) {
-      self.didCroppedImage = didCroppedImage
+    init(didCropAction: @escaping (Quadrilateral?, UIImage) -> Void) {
+      self.didCropAction = didCropAction
     }
 
     // MARK: Public
 
-    public func cropped(image: UIImage) {
-      didCroppedImage(image)
+    public func cropped(quard: Quadrilateral?, image: UIImage) {
+      didCropAction(quard, image)
     }
 
     // MARK: Internal
 
-    let didCroppedImage: (UIImage) -> Void
+    let didCropAction: (Quadrilateral?, UIImage) -> Void
 
   }
 }
@@ -96,7 +96,7 @@ struct CameraScanEditView_Previews: PreviewProvider {
       image: .init(),
       quad: .none,
       isRotateImage: false,
-      didCroppedImage: { _ in },
+      didCropAction: { _, _ in },
       errorAction: { _ in })
   }
 }

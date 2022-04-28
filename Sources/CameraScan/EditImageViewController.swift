@@ -5,7 +5,7 @@ import UIKit
 // MARK: - EditImageViewDelegate
 
 public protocol EditImageViewDelegate: AnyObject {
-  func cropped(image: UIImage)
+  func cropped(quard: Quadrilateral?, image: UIImage)
 }
 
 // MARK: - EditImageViewController
@@ -44,7 +44,7 @@ public final class EditImageViewController: UIViewController {
       isCropped = false
 
       guard let cropImage = flatImage() else { return }
-      delegate?.cropped(image: cropImage)
+      delegate?.cropped(quard: quad, image: cropImage)
     }
   }
 
@@ -109,8 +109,7 @@ extension EditImageViewController {
       FilterKey.bottomRight.rawValue: CIVector(cgPoint: cartesianScaledQuad.cornerPoint.topRight),
     ])
 
-    delegate?.cropped(image: .make(ciImage: filtedImage))
-
+    delegate?.cropped(quard: quad, image: .make(ciImage: filtedImage))
   }
 
   public func flatImage() -> UIImage? {
