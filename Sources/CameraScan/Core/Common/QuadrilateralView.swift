@@ -30,9 +30,10 @@ final class QuadrilateralView: UIView {
     didSet {
       cornerViews.forEach { $0.isHidden = !editable }
 
-      quadLayer.fillColor = scanBoxingLayer.apply(isEditing: editable).fillColor.cgColor
-      quadLayer.strokeColor = scanBoxingLayer.apply(isEditing: editable).strokeColor.cgColor
-      quadLayer.lineWidth = scanEditLayer.apply(isEditing: editable).style.strokeWidth
+      backgroundQuadLayer.fillColor = scanBoxingLayer.apply(isEditing: editable).fillColor.cgColor
+      foregroundQuadLayer.fillColor = UIColor.clear.cgColor
+      foregroundQuadLayer.strokeColor = scanBoxingLayer.apply(isEditing: editable).strokeColor.cgColor
+      foregroundQuadLayer.lineWidth = scanEditLayer.apply(isEditing: editable).style.strokeWidth
 
       guard let quad = quad else { return }
       draw(quad: quad, animated: false)
@@ -44,9 +45,10 @@ final class QuadrilateralView: UIView {
 
   override public func layoutSubviews() {
     super.layoutSubviews()
-    guard quadLayer.frame != bounds else { return }
+    guard backgroundQuadLayer.frame != bounds else { return }
 
-    quadLayer.frame = bounds
+    backgroundQuadLayer.frame = bounds
+    foregroundQuadLayer.frame = bounds
     drawQuadrilateral(quad: quad, animated: false)
   }
 
@@ -57,7 +59,14 @@ final class QuadrilateralView: UIView {
 
   // MARK: Private
 
-  private lazy var quadLayer: CAShapeLayer = {
+  private lazy var backgroundQuadLayer: CAShapeLayer = {
+    let layer = CAShapeLayer()
+    layer.opacity = 1.0
+    layer.isHidden = true
+    return layer
+  }()
+
+  private lazy var foregroundQuadLayer: CAShapeLayer = {
     let layer = CAShapeLayer()
     layer.opacity = 1.0
     layer.isHidden = true
@@ -88,9 +97,10 @@ final class QuadrilateralView: UIView {
   private var isHighlighted = false {
     didSet(oldValue) {
       guard oldValue != isHighlighted else { return }
-      quadLayer.fillColor = isHighlighted ? UIColor.clear.cgColor : scanBoxingLayer.edit.fillColor.cgColor
-      quadLayer.strokeColor = scanBoxingLayer.edit.strokeColor.cgColor
-      quadLayer.lineWidth = scanBoxingLayer.edit.strokeWidth
+      backgroundQuadLayer.fillColor = isHighlighted ? UIColor.clear.cgColor : scanBoxingLayer.edit.fillColor.cgColor
+      foregroundQuadLayer.fillColor = UIColor.clear.cgColor
+      foregroundQuadLayer.strokeColor = scanBoxingLayer.edit.strokeColor.cgColor
+      foregroundQuadLayer.lineWidth = scanBoxingLayer.edit.strokeWidth
 
       isHighlighted
         ? bringSubviewToFront(quadView)
@@ -105,8 +115,10 @@ extension QuadrilateralView {
   // MARK: Internal
 
   func removeQuadrilateral() {
-    quadLayer.path = .none
-    quadLayer.isHidden = true
+    backgroundQuadLayer.path = .none
+    backgroundQuadLayer.isHidden = true
+    foregroundQuadLayer.path = .none
+    foregroundQuadLayer.isHidden = true
   }
 
   func drawQuadrilateral(quad: Quadrilateral?, animated: Bool) {
@@ -186,7 +198,8 @@ extension QuadrilateralView {
       bottomAnchor.constraint(equalTo: quadView.bottomAnchor),
       trailingAnchor.constraint(equalTo: quadView.trailingAnchor),
     ])
-    quadView.layer.addSublayer(quadLayer)
+    quadView.layer.addSublayer(backgroundQuadLayer)
+    quadView.layer.addSublayer(foregroundQuadLayer)
   }
 
   private func draw(quad: Quadrilateral, animated: Bool) {
@@ -201,11 +214,15 @@ extension QuadrilateralView {
     if animated == true {
       let pathAnimation = CABasicAnimation(keyPath: "path")
       pathAnimation.duration = 0.2
-      quadLayer.add(pathAnimation, forKey: "path")
+      backgroundQuadLayer.add(pathAnimation, forKey: "path")
+      foregroundQuadLayer.add(pathAnimation, forKey: "path")
     }
 
-    quadLayer.path = path.cgPath
-    quadLayer.isHidden = false
+    backgroundQuadLayer.path = path.cgPath
+    backgroundQuadLayer.isHidden = false
+
+    foregroundQuadLayer.path = quad.path.cgPath
+    foregroundQuadLayer.isHidden = false
   }
 
   private func valid(point: CGPoint, cornerViewSize: CGSize, inView view: UIView) -> CGPoint {
