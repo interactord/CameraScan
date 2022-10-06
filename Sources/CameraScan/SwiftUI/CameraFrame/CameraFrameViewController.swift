@@ -13,7 +13,7 @@ final class CameraFrameViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     applyVideoLayer()
-    excuteRunningSession()
+    executeRunningSession()
   }
 
   func onTapRecord() {
@@ -32,10 +32,12 @@ final class CameraFrameViewController: UIViewController {
     }
   }
 
-  fileprivate func excuteRunningSession() {
+  fileprivate func executeRunningSession() {
     #if targetEnvironment(simulator)
     #else
-    configuration.captureSession.startRunning()
+    DispatchQueue.main.async { [weak self] in
+      self?.configuration.captureSession.startRunning()
+    }
     #endif
   }
 

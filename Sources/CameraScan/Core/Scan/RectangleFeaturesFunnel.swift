@@ -17,14 +17,14 @@ final class RectangleFeaturesFunnel {
     static let maxNumberOfRectangles = 8
 
     /// - Note:
-    ///   - The minimum number of rectangles needed to start making comparaisons and determining which rectangle to display. This value should always be inferior than `maxNumberOfRectangles`.
+    ///   - The minimum number of rectangles needed to start making comparisons and determining which rectangle to display. This value should always be inferior than `maxNumberOfRectangles`.
     ///   - A higher value will delay the first time a rectangle is displayed.
     static let minNumberOfRectangles = 3
 
     /// - Note: The value in pixels used to determine if two rectangle match or not. A higher value will prevent displayed rectangles to be refreshed. On the opposite, a smaller value will make new rectangles be displayed constantly.
     static let matchingThreshold: CGFloat = 40.0
 
-    /// - Note: The minumum number of matching rectangles (within the `rectangle` queue), to be confident enough to display a rectangle.
+    /// - Note: The minimum number of matching rectangles (within the `rectangle` queue), to be confident enough to display a rectangle.
     static let minNumberOfMatches = 3
 
     /// - Note: The number of similar rectangles that need to be found to auto scan.
