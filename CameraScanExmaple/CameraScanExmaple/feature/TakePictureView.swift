@@ -13,6 +13,7 @@ struct TakePictureView: View {
     ZStack {
       CameraFrameView(
         onTapCapture: $isCaptured,
+        isFrontCamera: $isFrontCamera,
         didTapCaptureAction: { print($0) })
         .background(Color.black)
 
@@ -40,6 +41,13 @@ struct TakePictureView: View {
             })
 
             Spacer(minLength: 15)
+
+            Button(action: { isFrontCamera.toggle() }) {
+              Image(systemName: "arrow.triangle.2.circlepath.camera")
+            }
+
+            Spacer(minLength: 15)
+
             Button(action: { isCaptured.toggle() }) {
               Circle()
                 .fill(Color.red)
@@ -71,7 +79,7 @@ struct TakePictureView: View {
   // MARK: Private
 
   @State private var isCaptured: Bool = false
-
+  @State private var isFrontCamera: Bool = false
 }
 
 // MARK: - TakePictureView_Previews

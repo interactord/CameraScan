@@ -44,13 +44,13 @@ struct CameraFrameConfiguration {
 }
 
 extension CameraFrameConfiguration {
-  fileprivate func mutateDevice() -> Self {
+  func mutateDevice(position: AVCaptureDevice.Position) -> Self {
     mutate(currentCamera: AVCaptureDevice.DiscoverySession(
       deviceTypes: [.builtInWideAngleCamera, .builtInDualCamera],
       mediaType: .video,
       position: .unspecified)
       .devices
-      .first(where: { $0.position == .back }))
+      .first(where: { $0.position == position }))
   }
 
   fileprivate func mutateInOutput() -> Self {
@@ -88,8 +88,19 @@ extension CameraFrameConfiguration {
       currentCamera: .none,
       photoOutput: .none,
       previewLayer: .none)
-      .mutateDevice()
-      .mutateInOutput()
-      .mutatePreviewLayer()
+    .mutateDevice(position: .back)
+    .mutateInOutput()
+    .mutatePreviewLayer()
+  }
+
+  static var frontCamera: Self {
+    Self.init(
+      captureSession: .init(),
+      currentCamera: .none,
+      photoOutput: .none,
+      previewLayer: .none)
+    .mutateDevice(position: .front)
+    .mutateInOutput()
+    .mutatePreviewLayer()
   }
 }

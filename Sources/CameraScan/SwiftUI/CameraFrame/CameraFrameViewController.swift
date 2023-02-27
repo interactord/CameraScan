@@ -7,7 +7,7 @@ final class CameraFrameViewController: UIViewController {
 
   var image: UIImage?
   let session: AVCaptureSession = .init()
-  let configuration: CameraFrameConfiguration = .default
+  var configuration: CameraFrameConfiguration = .default
   weak var proxyDelegate: AVCapturePhotoCaptureDelegate?
 
   override func viewDidLoad() {
@@ -23,19 +23,31 @@ final class CameraFrameViewController: UIViewController {
       delegate: proxyDelegate)
   }
 
+  func mutateCameraPosition(isFront: Bool) {
+    self.configuration.captureSession.stopRunning()
+    self.configuration = isFront ? .frontCamera : .default
+    applyVideoLayer()
+    executeRunningSession()
+  }
+
   // MARK: Fileprivate
 
   fileprivate func applyVideoLayer() {
-    if let layer = configuration.previewLayer {
-      layer.frame = view.frame
+    guard let layer = configuration.previewLayer else { return }
+    layer.frame = view.frame
+
+    guard let oldLayer = view.layer.sublayers?.first else {
       view.layer.insertSublayer(layer, at: .zero)
+      return
     }
+
+    view.layer.replaceSublayer(oldLayer, with: layer)
   }
 
   fileprivate func executeRunningSession() {
     #if targetEnvironment(simulator)
     #else
-    DispatchQueue.main.async { [weak self] in
+    DispatchQueue.global(qos: .background).async { [weak self] in
       self?.configuration.captureSession.startRunning()
     }
     #endif

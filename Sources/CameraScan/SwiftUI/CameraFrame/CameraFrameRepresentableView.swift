@@ -10,13 +10,16 @@ struct CameraFrameRepresentableView {
   private let onDismissalAction: () -> Void
 
   @Binding var onTapCapture: Bool
+  @Binding var isFrontCamera: Bool
 
   init(
     onTapCapture: Binding<Bool>,
+    isFrontCamera: Binding<Bool>,
     didCompletedAction: @escaping (UIImage) -> Void,
     onDismissalAction: @escaping () -> Void)
   {
     _onTapCapture = onTapCapture
+    _isFrontCamera = isFrontCamera
     self.didCompletedAction = didCompletedAction
     self.onDismissalAction = onDismissalAction
   }
@@ -36,11 +39,10 @@ extension CameraFrameRepresentableView: UIViewControllerRepresentable {
   }
 
   func updateUIViewController(_ uiViewController: CameraFrameViewController, context: Context) {
+    uiViewController.mutateCameraPosition(isFront: isFrontCamera)
     guard onTapCapture else { return }
     uiViewController.onTapRecord()
   }
-
-
 }
 
 extension CameraFrameRepresentableView {
