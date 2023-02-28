@@ -5,18 +5,22 @@ import UIKit
 // MARK: - ImagePicker
 
 public struct ImagePicker {
-
+  private let allowsEditing: Bool
+  private let sourceType: UIImagePickerController.SourceType
   private let onSelectedImageAction: (UIImage) -> Void
   private let onDismissalAction: () -> Void
 
   public init(
+    allowsEditing: Bool = false,
+    sourceType: UIImagePickerController.SourceType = .photoLibrary,
     onSelectedImageAction: @escaping (UIImage) -> Void,
     onDismissalAction: @escaping () -> Void = {})
   {
+    self.allowsEditing = allowsEditing
+    self.sourceType = sourceType
     self.onSelectedImageAction = onSelectedImageAction
     self.onDismissalAction = onDismissalAction
   }
-
 }
 
 
@@ -26,8 +30,8 @@ extension ImagePicker: UIViewControllerRepresentable {
 
   public func makeUIViewController(context: Context) -> some UIViewController {
     let controller = UIImagePickerController()
-    controller.allowsEditing = false
-    controller.sourceType = .photoLibrary
+    controller.allowsEditing = allowsEditing
+    controller.sourceType = sourceType
     controller.delegate = context.coordinator
 
     return controller

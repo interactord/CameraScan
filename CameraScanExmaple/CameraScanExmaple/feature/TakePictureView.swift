@@ -29,6 +29,7 @@ struct TakePictureView: View {
         VStack {
           HStack {
             Spacer()
+            
             SelectPhotoButton(onSelectedImageAction: { image in
               print(image)
             }, content: {

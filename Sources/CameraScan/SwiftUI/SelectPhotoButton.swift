@@ -9,10 +9,17 @@ public struct SelectPhotoButton<Content: View> {
   private let onSelectedImageAction: (UIImage) -> Void
   @State private var isShowImagePicker: Bool = false
 
+  private let allowsEditing: Bool
+  private let sourceType: UIImagePickerController.SourceType
+
   public init(
+    allowsEditing: Bool = false,
+    sourceType: UIImagePickerController.SourceType = .photoLibrary,
     onSelectedImageAction: @escaping (UIImage) -> Void,
     @ViewBuilder content: () -> Content)
   {
+    self.allowsEditing = allowsEditing
+    self.sourceType = sourceType
     self.onSelectedImageAction = onSelectedImageAction
     self.content = content()
   }
@@ -32,6 +39,8 @@ extension SelectPhotoButton: View {
       isPresented: $isShowImagePicker,
       content: {
         ImagePicker(
+          allowsEditing: allowsEditing,
+          sourceType: sourceType,
           onSelectedImageAction: onSelectedImageAction,
           onDismissalAction: { isShowImagePicker = false })
       })
