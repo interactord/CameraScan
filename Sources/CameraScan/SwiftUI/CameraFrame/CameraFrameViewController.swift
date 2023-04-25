@@ -35,7 +35,7 @@ final class CameraFrameViewController: UIViewController {
   fileprivate func executeRunningSession() {
     #if targetEnvironment(simulator)
     #else
-    DispatchQueue.main.async { [weak self] in
+    DispatchQueue.global(qos: .background).async { [weak self] in
       self?.configuration.captureSession.startRunning()
     }
     #endif
