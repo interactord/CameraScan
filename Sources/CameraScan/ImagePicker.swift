@@ -64,7 +64,7 @@ extension ImagePicker {
     }
 
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-      if let image = info[.editedImage] as? UIImage {
+      if let image = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage {
         onSelectedImageAction(image)
       }
       onDismissalAction()
