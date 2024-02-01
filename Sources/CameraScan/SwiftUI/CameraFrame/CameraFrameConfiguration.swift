@@ -1,4 +1,5 @@
 import AVFoundation
+import UIKit
 import Foundation
 
 // MARK: - CameraFrameConfiguration
@@ -76,7 +77,8 @@ extension CameraFrameConfiguration {
   fileprivate func mutatePreviewLayer() -> Self {
     let layer = AVCaptureVideoPreviewLayer(session: captureSession)
     layer.videoGravity = .resizeAspectFill
-    layer.connection?.videoOrientation = .portrait
+    let interfaceOrientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation.rawValue ?? .zero
+    layer.connection?.videoOrientation = AVCaptureVideoOrientation(rawValue: interfaceOrientation) ?? .portrait
     return mutate(previewLayer: layer)
   }
 }

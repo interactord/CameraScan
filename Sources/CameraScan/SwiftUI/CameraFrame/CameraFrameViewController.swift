@@ -12,8 +12,11 @@ final class CameraFrameViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    applyVideoLayer()
     executeRunningSession()
+  }
+  override func viewWillLayoutSubviews() {
+    super.viewWillLayoutSubviews()
+    applyVideoLayer()
   }
 
   func onTapRecord() {
@@ -42,5 +45,3 @@ final class CameraFrameViewController: UIViewController {
   }
 
 }
-
-

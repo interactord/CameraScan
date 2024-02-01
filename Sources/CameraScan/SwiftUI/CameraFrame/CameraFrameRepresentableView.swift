@@ -62,17 +62,31 @@ extension CameraFrameRepresentableView {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
       parent.onTapCapture = false
 
-      if let imageData = photo.fileDataRepresentation(), let image = UIImage(data: imageData) {
+      if let cgImage = photo.cgImageRepresentation() {
+        let image = UIImage(cgImage: cgImage, scale: 1, orientation: UIDevice.current.orientation.getUIImageOrientationFromDevice)
         didCompletedAction(image)
       }
       onDismissalAction()
     }
 
+
     // MARK: Private
 
     private let didCompletedAction: (UIImage) -> Void
     private let onDismissalAction: () -> Void
-
   }
+}
 
+
+extension UIDeviceOrientation {
+  fileprivate var getUIImageOrientationFromDevice: UIImage.Orientation {
+    return switch self {
+    case .portrait, .faceUp: .right
+    case .portraitUpsideDown, .faceDown: .left
+    case .landscapeLeft: .up
+    case .landscapeRight: .down
+    case .unknown: .up
+    @unknown default: .up
+    }
+  }
 }
